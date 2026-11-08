@@ -1,0 +1,49 @@
+
+name: Build Smart File Manager Pro
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build application
+        run: pyinstaller --noconfirm SmartFileManagerPro.spec
+
+      - name: Install Inno Setup
+        run: choco install innosetup --yes --no-progress
+
+      - name: Build Setup.exe
+        shell: pwsh
+        run: |
+          iscc installer.iss
+
+      - name: Upload Setup.exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: SmartFileManagerPro-Setup
+          path: Output/SmartFileManagerPro-Setup.exe
+          if-no-files-found: error
