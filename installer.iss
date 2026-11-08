@@ -1,0 +1,39 @@
+
+#define MyAppName "Smart File Manager Pro"
+#define MyAppVersion "4.2.0"
+#define MyAppPublisher "Smart File Manager Pro"
+#define MyAppExeName "SmartFileManagerPro.exe"
+
+[Setup]
+AppId={{A7F82D41-91B5-4C92-9E72-3B9A7F420001}
+AppName={#MyAppName}
+AppVersion={#MyAppVersion}
+AppPublisher={#MyAppPublisher}
+DefaultDirName={autopf}\Smart File Manager Pro
+DefaultGroupName={#MyAppName}
+OutputDir=Output
+OutputBaseFilename=SmartFileManagerPro-Setup
+Compression=lzma2
+SolidCompression=yes
+WizardStyle=modern
+ArchitecturesInstallIn64BitMode=x64
+
+[Tasks]
+Name: "desktopicon"; Description: "Create a desktop shortcut"; Flags: unchecked
+
+[Files]
+Source: "dist\SmartFileManagerPro\*"; DestDir: "{app}"; \
+    Flags: ignoreversion recursesubdirs createallsubdirs
+
+[Icons]
+Name: "{autoprograms}\{#MyAppName}"; \
+    Filename: "{app}\{#MyAppExeName}"
+
+Name: "{autodesktop}\{#MyAppName}"; \
+    Filename: "{app}\{#MyAppExeName}"; \
+    Tasks: desktopicon
+
+[Run]
+Filename: "{app}\{#MyAppExeName}"; \
+    Description: "Launch Smart File Manager Pro"; \
+    Flags: postinstall nowait skipifsilent
