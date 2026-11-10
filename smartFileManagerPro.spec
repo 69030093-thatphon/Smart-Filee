@@ -6,7 +6,7 @@ from PyInstaller.utils.hooks import (
     collect_submodules,
 )
 
-datas = []
+datas = [("fonts", "fonts"), ("icon.ico", ".")]
 binaries = []
 hiddenimports = []
 
@@ -41,6 +41,7 @@ exe = EXE(
     [],
     exclude_binaries=True,
     name="SmartFileManagerPro",
+    icon="icon.ico",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

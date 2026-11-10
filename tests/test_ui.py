@@ -31,9 +31,14 @@ class UiTests(unittest.TestCase):
 
     def setUp(self):
         self.w = appmod.MainWindow()
+        self.w.set_org_mode("By type")
         self.d = Path(tempfile.mkdtemp())
 
     def tearDown(self):
+        try:
+            self.w.set_org_mode("By type")
+        except Exception:
+            pass
         self.w.close()
 
     def wait(self, key):
@@ -243,6 +248,7 @@ class UiTests(unittest.TestCase):
         self.assertIn("2", self.w.org_go.text())
         self.w.set_org_mode("By month")
         self.assertEqual(self.w.org_table.rowCount(), 3)
+        self.w.set_org_mode("By type")
 
     def test_cleanup_page_prechecks_safe_items_only(self):
         tmp, big = self.d / "x.tmp", self.d / "huge.bin"
