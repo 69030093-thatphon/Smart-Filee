@@ -1,4 +1,4 @@
-# Smart File Manager Pro v4.2
+# Smart File Manager Pro v4.3
 
 ชุดเครื่องมือเดสก์ท็อปแบบ local-first สำหรับ Windows 10/11 (ใช้งานบน Linux/macOS ได้เช่นกัน) สร้างด้วย Python + PySide6
 ไม่มี telemetry และไม่มีการเรียกเครือข่าย ยกเว้นที่คุณสั่งเองใน *Network Tools*
@@ -81,7 +81,7 @@ python app.py
 
 ## การทดสอบ
 ```bash
-python -m unittest discover -s tests -v     # core + UI แบบ headless + ความครบถ้วนของ i18n (43 เทสต์)
+python -m unittest discover -s tests -v     # core + DB + UI แบบ headless + ความครบถ้วนของ i18n (58 เทสต์)
 ```
 
 ## โครงสร้างไฟล์
