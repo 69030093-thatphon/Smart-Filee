@@ -356,12 +356,12 @@ class MainWindow(QMainWindow):
         body.addWidget(content, 1)
 
         self.setCentralWidget(root)
-        account_menu = self.menuBar().addMenu("Account")
-        profile_action = QAction("Profile & devices…", self)
+        account_menu = self.menuBar().addMenu(tr("Account"))
+        profile_action = QAction(tr("Profile & devices…"), self)
         profile_action.triggered.connect(self.show_account_dialog)
         account_menu.addAction(profile_action)
         account_menu.addSeparator()
-        signout_action = QAction("Sign out and exit", self)
+        signout_action = QAction(tr("Sign out and exit"), self)
         signout_action.triggered.connect(self.sign_out_and_exit)
         account_menu.addAction(signout_action)
         self.toast = Toast(root)
@@ -404,11 +404,11 @@ class MainWindow(QMainWindow):
                 account_label = self.current_user.get("display_name", "")
                 self.setWindowTitle(f"{APP_NAME} — {account_label}" if account_label else APP_NAME)
         except Exception as exc:
-            QMessageBox.warning(self, "Account", str(exc))
+            QMessageBox.warning(self, tr("Account"), str(exc))
 
     def sign_out_and_exit(self):
         answer = QMessageBox.question(
-            self, "Sign out", "Sign out of your Smart File Manager Pro account and exit?",
+            self, tr("Sign out"), tr("Sign out of your Smart File Manager Pro account and exit?"),
             QMessageBox.Yes | QMessageBox.No, QMessageBox.No,
         )
         if answer != QMessageBox.Yes:
@@ -2564,26 +2564,32 @@ def main():
     # Load the saved UI language before showing the membership dialog.
     auth_settings = QSettings("SmartFileManagerPro", "SmartFileManagerPro")
     i18n.set_lang(auth_settings.value("lang", "en", type=str))
-    # Online membership is required before opening the local file-management workspace.
-    # The existing SQLite database remains local and is not uploaded to PostgreSQL.
-    try:
-        import membership_client
-        from auth_dialog import AuthDialog
-        membership_client.check_server()
-    except Exception as exc:
-        QMessageBox.critical(None, "Membership server", str(exc))
-        app.quit()
-        return
+    is_selftest = "--selftest" in sys.argv
+    if is_selftest:
+        user = {"id": "selftest", "email": "selftest@example.com", "display_name": "Self Test", "role": "user"}
+        token = "selftest-token"
+    else:
+        # Online membership is required before opening the local file-management workspace.
+        # The existing SQLite database remains local and is not uploaded to PostgreSQL.
+        try:
+            import membership_client
+            from auth_dialog import AuthDialog
+            membership_client.check_server()
+        except Exception as exc:
+            QMessageBox.critical(None, "Membership server", str(exc))
+            app.quit()
+            return
 
-    login = AuthDialog(VERSION)
-    if login.exec() != QDialog.Accepted or not login.user:
-        app.quit()
-        return
+        login = AuthDialog(VERSION)
+        if login.exec() != QDialog.Accepted or not login.user:
+            app.quit()
+            return
+        user, token = login.user, login.access_token
 
-    window = MainWindow(user=login.user)
-    window.membership_token = login.access_token  # kept in memory only; never written to disk
+    window = MainWindow(user=user)
+    window.membership_token = token  # kept in memory only; never written to disk
     window.show()
-    if "--selftest" in sys.argv:                 # used by CI: prove the app starts, then exit cleanly
+    if is_selftest:                 # used by CI: prove the app starts, then exit cleanly
         def finish():
             window._quitting = True
             window.close()
