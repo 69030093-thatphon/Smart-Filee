@@ -22,5 +22,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ls -la
-          gh release upload v4.3.0 SmartFileManagerPro-Setup.exe --clobber
+          gh release upload v4.3.0 SmartFileManagerPro-Setup.exe --repo ${{ github.repository }} --clobber
