@@ -148,11 +148,10 @@ class AuthDialog(QDialog):
                 self.show_login()
                 self.login_email.setText(self.register_email.text().strip())
                 self.login_password.clear()
-                self.subtitle.setText("Waiting for email confirmation…")
+                self.subtitle.setText(tr("Waiting for email confirmation…"))
                 QMessageBox.information(
                     self, tr("Confirm your email"),
-                    "Your account was created. Open the confirmation email on this same computer and click the link. "
-                    "Smart File Manager Pro will verify it and sign you in automatically.",
+                    tr("Your account was created. Open the confirmation email on this same computer and click the link. Smart File Manager Pro will verify it and sign you in automatically."),
                 )
                 self._confirmation_timer.start()
                 return
@@ -178,7 +177,7 @@ class AuthDialog(QDialog):
         try:
             if callback_result.get("error"):
                 raise membership_db.MembershipError(
-                    "Email confirmation failed: " + callback_result["error"]
+                    tr("Email confirmation failed: {error}", error=callback_result["error"])
                 )
             result = membership_db.complete_email_confirmation(
                 callback_result, self.login_email.text(), self.app_version
@@ -187,7 +186,7 @@ class AuthDialog(QDialog):
             self.access_token = result.get("access_token")
             QMessageBox.information(
                 self, tr("Email confirmed"),
-                "Your email has been confirmed. You are now signed in to Smart File Manager Pro.",
+                tr("Your email has been confirmed. You are now signed in to Smart File Manager Pro."),
             )
             self.accept()
         except membership_db.MembershipError as exc:
