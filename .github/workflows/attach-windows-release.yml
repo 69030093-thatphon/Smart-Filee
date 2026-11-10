@@ -1,0 +1,25 @@
+name: Attach Windows Asset to Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  attach:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact from Run
+        uses: actions/download-artifact@v4
+        with:
+          name: SmartFileManagerPro-Setup
+          run-id: 42838257926
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload to Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload v4.3.0 SmartFileManagerPro-Setup.exe --repo ${{ github.repository }} --clobber
