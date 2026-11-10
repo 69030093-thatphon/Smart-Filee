@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.3.1] - 2026-11-10
+
+### Fixed
+- **Zero-Configuration Supabase Client Startup:** Embedded default public client credentials in `membership_client.py` allowing instant standalone execution of installer builds without manual `.env` file creation.
+- **Installer & Spec Packaging:** Bundled `.env` into PyInstaller spec `datas` and Inno Setup `installer.iss`.
+- **Frozen Runtime Environment Resolution:** Added `sys._MEIPASS` discovery in `membership_client._load_settings()` for PyInstaller temporary extraction directories.
+
+---
+
 ## [4.3.0] - 2026-11-10
 
 ### Added

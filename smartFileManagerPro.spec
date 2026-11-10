@@ -6,7 +6,7 @@ from PyInstaller.utils.hooks import (
     collect_submodules,
 )
 
-datas = [("fonts", "fonts"), ("icon.ico", ".")]
+datas = [("fonts", "fonts"), ("icon.ico", "."), (".env", ".")]
 binaries = []
 hiddenimports = []
 

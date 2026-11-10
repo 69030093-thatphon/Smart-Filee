@@ -22,8 +22,12 @@ from dotenv import load_dotenv
 from supabase import Client, create_client
 
 APP_DIR = Path(__file__).resolve().parent
-APP_VERSION = "4.2"
+APP_VERSION = "4.3.1"
 _client: Client | None = None
+
+
+DEFAULT_SUPABASE_URL = "https://fyuzbacxqbrqkmeubwdb.supabase.co"
+DEFAULT_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_7G5QJEkOp2Tgx-3RSAh3kA_POSeexNE"
 
 
 class MembershipError(Exception):
@@ -37,6 +41,9 @@ def _load_settings() -> None:
     ]
     if getattr(sys, "frozen", False):
         candidates.insert(0, Path(sys.executable).resolve().parent / ".env")
+        meipass = getattr(sys, "_MEIPASS", None)
+        if meipass:
+            candidates.insert(0, Path(meipass) / ".env")
     for candidate in candidates:
         if candidate.is_file():
             load_dotenv(candidate, override=False)
@@ -44,8 +51,8 @@ def _load_settings() -> None:
 
 def _config() -> tuple[str, str]:
     _load_settings()
-    url = os.getenv("SUPABASE_URL", "").strip().rstrip("/")
-    key = os.getenv("SUPABASE_PUBLISHABLE_KEY", "").strip()
+    url = os.getenv("SUPABASE_URL", DEFAULT_SUPABASE_URL).strip().rstrip("/")
+    key = os.getenv("SUPABASE_PUBLISHABLE_KEY", DEFAULT_SUPABASE_PUBLISHABLE_KEY).strip()
     if not url or not key:
         raise MembershipError(
             "Supabase is not configured. Copy .env.example to .env and set "

@@ -30,7 +30,7 @@ from widgets import (Ring, BarList, Card, StatCard, TwoLineDelegate, BandDelegat
                      TLabel, TButton, TCheck, SortItem, SORT_ROLE, build_arrows, make_app_pixmap)
 
 APP_NAME = "Smart File Manager Pro"
-VERSION = "4.2"
+VERSION = "4.3.1"
 LOG_DIR = Path.home() / ".smart_file_manager_pro"
 LOG_FILE = LOG_DIR / "activity.log"                # legacy (imported into SQLite once)
 JOURNAL_FILE = LOG_DIR / "undo_journal.json"       # legacy (imported into SQLite once)

@@ -1,6 +1,6 @@
 
 #define MyAppName "Smart File Manager Pro"
-#define MyAppVersion "4.2.0"
+#define MyAppVersion "4.3.1"
 #define MyAppPublisher "Smart File Manager Pro"
 #define MyAppExeName "SmartFileManagerPro.exe"
 
@@ -24,6 +24,7 @@ Name: "desktopicon"; Description: "Create a desktop shortcut"; Flags: unchecked
 [Files]
 Source: "dist\SmartFileManagerPro\*"; DestDir: "{app}"; \
     Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".env"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; \
