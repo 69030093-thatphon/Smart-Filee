@@ -15,25 +15,27 @@ SKIP = {"accent", "accent2", "green", "muted", "CPU", "dashboard"}
 
 
 def ui_strings():
-    tree = ast.parse((ROOT / "app.py").read_text(encoding="utf-8"))
+    sources = ["app.py", "account_dialog.py", "auth_dialog.py"]
     found = set()
 
     def grab(node):
         for n in ast.walk(node):
             if isinstance(n, ast.Constant) and isinstance(n.value, str):
                 found.add(n.value)
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Call):
-            f = node.func
-            name = f.id if isinstance(f, ast.Name) else f.attr if isinstance(f, ast.Attribute) else None
-            if name in CALLS:
-                for a in node.args:
-                    if isinstance(a, ast.Constant):
-                        found.add(a.value)
-                    elif isinstance(a, (ast.List, ast.Tuple)):
-                        grab(a)
-        if isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name) and node.targets[0].id in ("pages", "actions"):
-            grab(node.value)
+    for src in sources:
+        tree = ast.parse((ROOT / src).read_text(encoding="utf-8"))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Call):
+                f = node.func
+                name = f.id if isinstance(f, ast.Name) else f.attr if isinstance(f, ast.Attribute) else None
+                if name in CALLS:
+                    for a in node.args:
+                        if isinstance(a, ast.Constant):
+                            found.add(a.value)
+                        elif isinstance(a, (ast.List, ast.Tuple)):
+                            grab(a)
+            if isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name) and node.targets[0].id in ("pages", "actions"):
+                grab(node.value)
     return {s for s in found if any(c.isalpha() for c in s) and s not in SKIP and not s.islower() or s in ("lowercase", "new", "changed", "up", "down", "used", "physical", "logical", "total", "available")}
 
 

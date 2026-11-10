@@ -356,12 +356,12 @@ class MainWindow(QMainWindow):
         body.addWidget(content, 1)
 
         self.setCentralWidget(root)
-        account_menu = self.menuBar().addMenu("Account")
-        profile_action = QAction("Profile & devices…", self)
+        account_menu = self.menuBar().addMenu(tr("Account"))
+        profile_action = QAction(tr("Profile & devices…"), self)
         profile_action.triggered.connect(self.show_account_dialog)
         account_menu.addAction(profile_action)
         account_menu.addSeparator()
-        signout_action = QAction("Sign out and exit", self)
+        signout_action = QAction(tr("Sign out and exit"), self)
         signout_action.triggered.connect(self.sign_out_and_exit)
         account_menu.addAction(signout_action)
         self.toast = Toast(root)
@@ -404,11 +404,11 @@ class MainWindow(QMainWindow):
                 account_label = self.current_user.get("display_name", "")
                 self.setWindowTitle(f"{APP_NAME} — {account_label}" if account_label else APP_NAME)
         except Exception as exc:
-            QMessageBox.warning(self, "Account", str(exc))
+            QMessageBox.warning(self, tr("Account"), str(exc))
 
     def sign_out_and_exit(self):
         answer = QMessageBox.question(
-            self, "Sign out", "Sign out of your Smart File Manager Pro account and exit?",
+            self, tr("Sign out"), tr("Sign out of your Smart File Manager Pro account and exit?"),
             QMessageBox.Yes | QMessageBox.No, QMessageBox.No,
         )
         if answer != QMessageBox.Yes:
