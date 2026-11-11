@@ -107,3 +107,36 @@ OK (58 passed, 0 failures, 0 errors, 0 skipped)
 | `test_thai_ui_has_no_leftover_english` | Comprehensive Thai language check on all rendered widgets | Zero untranslated words | Match confirmed | PASS |
 | `test_theme_and_font_choices_apply` | Theme and font size settings persist to QSettings | Settings updated | Match confirmed | PASS |
 | `test_undo_survives_restart_via_db` | Second `MainWindow` instance reloads undo stack | Stack reloaded from DB | Match confirmed | PASS |
+
+---
+
+## 3. Rust Native Test Matrix (Phase 9 Verification)
+
+```text
+======================================================================
+Ran 53 tests in workspace (50 unit tests + 3 benchmark tests)
+
+OK (53 passed, 0 failures, 0 errors, 0 skipped)
+======================================================================
+```
+
+| Rust Crate | Module / Scope | Tests | Passed | Failed | Status |
+|---|---|---|---|---|---|
+| `smart_filee_common` | Cancellation, Formatters, Path Guards, Tidy Score | 6 | 6 | 0 | **PASS** |
+| `smart_filee_localization` | Bilingual Translation, Formatting, Interpolation | 2 | 2 | 0 | **PASS** |
+| `smart_filee_file_engine` | Traversal, Unique Dest, Atomic Moves, Undo, Trash, CSV | 10 | 10 | 0 | **PASS** |
+| `smart_filee_organizer` | Categorization, Custom Rules, Organization Planner | 4 | 4 | 0 | **PASS** |
+| `smart_filee_search` | Wildcard & Substring Search, Size Filters | 1 | 1 | 0 | **PASS** |
+| `smart_filee_renamer` | Transforms, Numbering, Collision Detection | 2 | 2 | 0 | **PASS** |
+| `smart_filee_duplicate` | Staged SHA-256 Duplicate Detection | 1 | 1 | 0 | **PASS** |
+| `smart_filee_image_engine` | Lanczos Perceptual Fingerprints, Union-Find Clusters | 2 | 2 | 0 | **PASS** |
+| `smart_filee_disk_analyzer` | Category Breakdown, Bounded Min-Heap Top 100 | 1 | 1 | 0 | **PASS** |
+| `smart_filee_cleanup` | Temp Patterns, Old Large Files, Empty Directory Pruning | 3 | 3 | 0 | **PASS** |
+| `smart_filee_backup` | Differential Backup Planner & Safe Copy Engine | 2 | 2 | 0 | **PASS** |
+| `smart_filee_system_monitor`| Read-Only Hardware Metrics, Process Listing | 2 | 2 | 0 | **PASS** |
+| `smart_filee_network` | Local IP, DNS Timing, ICMP Ping, TCP Port Connectivity | 3 | 3 | 0 | **PASS** |
+| `smart_filee_database` | SQLite Schema, WAL Mode, Undo Stack, HashCache Pruning | 4 | 4 | 0 | **PASS** |
+| `smart_filee_auth` | Publishable Key Guard, Loopback Callback Server | 2 | 2 | 0 | **PASS** |
+| `smart_filee_ui` | Theme Palettes, Nav Rail, Shortcuts, Command Palette, Toasts | 5 | 5 | 0 | **PASS** |
+| `smart_filee_app` | End-to-End Self-Test Validation & Performance Benchmarks | 4 | 4 | 0 | **PASS** |
+| **Total** | **Workspace Complete** | **53** | **53** | **0** | **100% PASS** |
