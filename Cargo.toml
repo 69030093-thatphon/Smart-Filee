@@ -4,6 +4,9 @@ members = [
     "crates/common",
     "crates/localization",
     "crates/file_engine",
+    "crates/organizer",
+    "crates/search",
+    "crates/renamer",
     "crates/app",
 ]
 
@@ -26,9 +29,10 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 chrono = { version = "0.4", features = ["serde"] }
 
-# Filesystem & OS Integration
+# Filesystem & Pattern matching
 trash = "5.3"
 walkdir = "2.5"
+glob = "0.3"
 
 # CLI & Environment
 dotenvy = "0.15"
@@ -37,6 +41,9 @@ dotenvy = "0.15"
 smart_filee_common = { path = "crates/common" }
 smart_filee_localization = { path = "crates/localization" }
 smart_filee_file_engine = { path = "crates/file_engine" }
+smart_filee_organizer = { path = "crates/organizer" }
+smart_filee_search = { path = "crates/search" }
+smart_filee_renamer = { path = "crates/renamer" }
 
 [workspace.lints.rust]
 unsafe_code = "warn"
@@ -51,3 +58,5 @@ doc_markdown = "allow"
 module_name_repetitions = "allow"
 too_many_lines = "allow"
 missing_errors_doc = "allow"
+field_reassign_with_default = "allow"
+manual_string_new = "allow"

@@ -1,7 +1,7 @@
 # Smart-Filee — Developer Handoff Document (Rust Migration)
 
 **Generated:** 2026-11-12  
-**Current Phase:** Phase 2 Completed / Phase 3 (Essential File Tools) Ready to Start  
+**Current Phase:** Phase 3 Completed / Phase 4 (Analysis Engines) Ready to Start  
 **Active Working Branch:** `feat/rust-migration`  
 **Base Integration Branch:** `develop`  
 **Production Branch:** `main` (Protected; commit `f38ae5b` untouched)  
@@ -11,28 +11,30 @@
 
 ## 1. Executive Summary
 
-Phase 0 (Initial Audit & Architecture), Phase 1 (Rust Foundation), and Phase 2 (Core File Engine) have been fully completed with 100% verification.
+Phases 0, 1, 2, and 3 have been completed with 100% verification and zero test failures.
 
-The Core File Engine (`smart_filee_file_engine`) provides safe directory traversal, deterministic collision-free destination naming, atomic file moving with cross-device copy fallback, safe reverse undo rollback with empty folder pruning, native Recycle Bin integration, and UTF-8 BOM CSV export.
+The application workspace now contains:
+- `smart_filee_common`: Error types, paths, formatters, cancellation tokens.
+- `smart_filee_localization`: Zero-allocation bilingual engine (EN/TH).
+- `smart_filee_file_engine`: Traversal, unique naming, atomic moves, undo rollback, Recycle Bin, CSV export.
+- `smart_filee_organizer`: Categorization, custom rules, organization planning.
+- `smart_filee_search`: Wildcard pattern and substring file search.
+- `smart_filee_renamer`: Bulk renaming with case/space transforms, numbering, and conflict detection.
+- `smart_filee_app`: Entry point with logging and `--selftest`.
 
-All 18 Rust unit tests across the workspace and all 58 legacy Python baseline unit tests pass with zero errors.
+All 25 Rust unit tests and all 58 legacy Python reference unit tests pass with zero errors.
 
 ---
 
 ## 2. Completed Milestones
 
 ### Phase 0 — Repository Audit & Architecture (COMPLETED)
-- Audited legacy codebase, SQLite WAL schema, Supabase Auth REST, and safety models.
-- Authored initial audit, feature inventory, system architecture, workspace structure, data flow, and migration roadmap.
-
 ### Phase 1 — Rust Foundation (COMPLETED)
-- Initialized workspace root, toolchain, `rustfmt.toml`, `-D warnings` Clippy configuration.
-- Implemented `crates/common`, `crates/localization`, and `crates/app`.
-- Configured multi-platform CI workflow (`.github/workflows/ci.yml`).
-
 ### Phase 2 — Core File Engine (COMPLETED)
-- Implemented `crates/file_engine` (`FileItem`, `walk_files`, `unique_dest`, `move_files`, `undo_moves`, `cleanup_empty_dirs`, `trash_files`, `UndoBatchRecord`, `export_csv`).
-- Expanded headless `--selftest` in `crates/app` to validate file engine operations end-to-end.
+### Phase 3 — Essential File Tools (COMPLETED)
+- `crates/organizer`: `categorize`, `CustomRule`, `parse_rules`, `rule_folder`, `plan_organize`.
+- `crates/search`: `search_files`, `SearchResult`, `SearchResultItem`.
+- `crates/renamer`: `plan_rename`, `apply_rename`, `RenameOptions`, `RenameStatus`, `CaseTransform`, `SpaceTransform`.
 
 ---
 
@@ -52,7 +54,7 @@ All 18 Rust unit tests across the workspace and all 58 legacy Python baseline un
    ```
 4. **Rust Automated Tests:**
    ```bash
-   cargo test --workspace  # 18 tests passed in 0.28s, Exit 0
+   cargo test --workspace  # 25 tests passed in 0.34s, Exit 0
    ```
 5. **Headless Self-Test:**
    ```bash
@@ -60,15 +62,14 @@ All 18 Rust unit tests across the workspace and all 58 legacy Python baseline un
    ```
 6. **Python Reference Baseline:**
    ```bash
-   python -m unittest discover -s tests -v  # 58 tests passed in 3.0s, Exit 0
+   python -m unittest discover -s tests -v  # 58 tests passed in 2.5s, Exit 0
    ```
 
 ---
 
-## 4. Next Step: Phase 3 — Essential File Tools
+## 4. Next Step: Phase 4 — Analysis Engines
 
 The next phase will implement:
-- `crates/organizer`: File categorization (7 categories + custom rules), organization modes (`By type`, `By month`, `By type + month`), and move planning.
-- `crates/search`: Fast wildcard and substring filename search with minimum size filters.
-- `crates/renamer`: Bulk renamer planning, string replacement, prefix/suffix, lower/upper/title casing, sequential numbering, and in-batch conflict detection.
-- Unit tests matching legacy `test_core.py` and `test_ui.py` behaviors.
+- `crates/duplicate`: Duplicate Finder with staged detection (Size → 64KB head hash → Full SHA-256) and oldest-copy retention.
+- `crates/image_engine`: Perceptual image hashing (9x9 Lanczos resize, dhash, ahash, average brightness, union-find clustering) and EXIF date extraction.
+- `crates/disk_analyzer`: Storage analysis (categories size aggregation, subfolder sizes, bounded min-heap top 100 largest files).

@@ -4,6 +4,9 @@ mod logging;
 use smart_filee_common::{fmt_bytes, fmt_duration, protected_reason, CancellationToken};
 use smart_filee_file_engine::{is_illegal_name, move_files, undo_moves, unique_dest, walk_files};
 use smart_filee_localization::{current_language, set_language, tr, Language};
+use smart_filee_organizer::{categorize, plan_organize, CustomRule, OrganizeMode};
+use smart_filee_renamer::{apply_rename, plan_rename, RenameOptions, RenameStatus};
+use smart_filee_search::search_files;
 use std::fs;
 use std::path::Path;
 use tracing::info;
@@ -146,6 +149,52 @@ fn run_selftest() -> anyhow::Result<()> {
     let undo_res = undo_moves(&move_res.moves, &[], &cancel, |_, _| {});
     anyhow::ensure!(undo_res.restored == 1, "undo_moves failed to restore file");
     anyhow::ensure!(test_file.exists(), "Source file should be restored");
+
+    // 6. Validate Organizer, Search, Renamer
+    anyhow::ensure!(
+        categorize(Path::new("pic.jpg")) == "Images",
+        "categorize failed"
+    );
+    anyhow::ensure!(
+        categorize(Path::new("doc.pdf")) == "Documents",
+        "categorize failed"
+    );
+
+    let doc_file = temp_dir.join("invoice_may.pdf");
+    fs::write(&doc_file, "invoice")?;
+
+    let rules = vec![CustomRule::new("invoice*", "Finance")];
+    let org_plan = plan_organize(&temp_dir, OrganizeMode::ByType, &rules)?;
+    anyhow::ensure!(
+        org_plan.iter().any(|i| i.category == "Finance"),
+        "Organizer custom rule matching failed"
+    );
+
+    let search_res = search_files(&temp_dir, "*.pdf", 0, 10, &cancel, |_, _| {});
+    anyhow::ensure!(
+        search_res.results.len() == 1,
+        "search_files wildcard failed"
+    );
+
+    let mut rn_opts = RenameOptions::default();
+    rn_opts.find = "may";
+    rn_opts.replace = "june";
+    let rn_plan = plan_rename(std::slice::from_ref(&doc_file), &rn_opts);
+    anyhow::ensure!(
+        rn_plan[0].status == RenameStatus::OK,
+        "Rename planning status failed"
+    );
+    anyhow::ensure!(
+        rn_plan[0].new_name == "invoice_june.pdf",
+        "Rename new name failed"
+    );
+
+    let (rn_moves, _) = apply_rename(&rn_plan, &cancel, |_, _| {});
+    anyhow::ensure!(rn_moves.len() == 1, "apply_rename failed");
+    anyhow::ensure!(
+        temp_dir.join("invoice_june.pdf").exists(),
+        "Renamed file does not exist"
+    );
 
     let _ = fs::remove_dir_all(&temp_dir);
 

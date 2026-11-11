@@ -31,10 +31,10 @@
 | **File Engine** | Persistent Undo Stack & History | `core.py::undo_moves`, `db.py` | `crates/database`, `crates/file_engine` | COMPLETED | Reverts moved files; cleans empty dirs; prevents overwrite. |
 | **File Engine** | OS Recycle Bin Integration | `core.py::trash_files` | `crates/file_engine` | COMPLETED | Safely trashes files using native OS recycle bin APIs. |
 | **File Engine** | CSV Export Utility | `core.py::export_csv` | `crates/file_engine` | COMPLETED | Exports UTF-8 with BOM for Excel compatibility. |
-| **Organizer** | File Categorization by Extension | `core.py::categorize` | `crates/organizer` | NOT_STARTED | 7 categories match `CATEGORY_MAP` ("Images", "Documents", etc.). |
-| **Organizer** | Custom Rules Matching | `core.py::rule_folder`, `parse_rules` | `crates/organizer` | NOT_STARTED | Glob wildcard & substring rules evaluated in priority order. |
+| **Organizer** | File Categorization by Extension | `core.py::categorize` | `crates/organizer` | COMPLETED | 7 categories match `CATEGORY_MAP` ("Images", "Documents", etc.). |
+| **Organizer** | Custom Rules Matching | `core.py::rule_folder`, `parse_rules` | `crates/organizer` | COMPLETED | Glob wildcard & substring rules evaluated in priority order. |
 | **Organizer** | EXIF Date Extraction for Photos | `core.py::exif_date` | `crates/image_engine` | NOT_STARTED | Reads `DateTimeOriginal` / `DateTime` from JPEG/TIFF/WebP. |
-| **Organizer** | Organization Planning (`By type`, `By month`, etc.) | `core.py::plan_organize` | `crates/organizer` | NOT_STARTED | Accurately generates planned moves without disk side effects. |
+| **Organizer** | Organization Planning (`By type`, `By month`, etc.) | `core.py::plan_organize` | `crates/organizer` | COMPLETED | Accurately generates planned moves without disk side effects. |
 | **Organizer** | Automatic Watch Folder (Debounced) | `app.py::auto_organize`, `watcher` | `crates/organizer` | NOT_STARTED | Monitored folder moves settled files; debounced 5 seconds. |
 | **Disk Analyzer** | Space Usage by Category & Subfolder | `core.py::analyze_disk` | `crates/disk_analyzer` | NOT_STARTED | Aggregates category byte totals and top-level folder sizes. |
 | **Disk Analyzer** | Top 100 Largest Files Ranking | `core.py::analyze_disk` | `crates/disk_analyzer` | NOT_STARTED | Bounded min-heap preserves top 100 files by size. |
@@ -45,9 +45,9 @@
 | **Cleanup** | Temporary & Junk File Identification | `core.py::find_cleanup` | `crates/cleanup` | NOT_STARTED | Matches `TEMP_PATTERNS` with minimum age thresholds (1d/7d). |
 | **Cleanup** | Old Large Unused Files Identification | `core.py::find_cleanup` | `crates/cleanup` | NOT_STARTED | Identifies files >= `min_mb` untouched for >= `old_days`. |
 | **Cleanup** | Empty Directory Tree Pruning | `core.py::find_cleanup` | `crates/cleanup` | NOT_STARTED | Identifies top-most empty directory nodes. |
-| **Search** | Fast Filename & Wildcard Search | `core.py::search_files` | `crates/search` | NOT_STARTED | Supports glob `*?[` and substring search; min size filter. |
-| **Bulk Renamer** | Rename Planning & Case/Space Transforms | `core.py::plan_rename` | `crates/renamer` | NOT_STARTED | Find/replace, prefix/suffix, lower/upper/title, numbering. |
-| **Bulk Renamer** | In-Batch & Disk Collision Detection | `core.py::plan_rename` | `crates/renamer` | NOT_STARTED | Detects duplicate new names and existing file clashes. |
+| **Search** | Fast Filename & Wildcard Search | `core.py::search_files` | `crates/search` | COMPLETED | Supports glob `*?[` and substring search; min size filter. |
+| **Bulk Renamer** | Rename Planning & Case/Space Transforms | `core.py::plan_rename` | `crates/renamer` | COMPLETED | Find/replace, prefix/suffix, lower/upper/title, numbering. |
+| **Bulk Renamer** | In-Batch & Disk Collision Detection | `core.py::plan_rename` | `crates/renamer` | COMPLETED | Detects duplicate new names and existing file clashes. |
 | **Backup** | Differential Backup Planning | `core.py::plan_backup` | `crates/backup` | NOT_STARTED | One-way copy of new & modified files; protects destination. |
 | **Backup** | Safe Backup Execution | `core.py::run_backup` | `crates/backup` | NOT_STARTED | Preserves file timestamps; never deletes destination files. |
 | **System & Network** | System Resource Metrics (CPU, RAM, Disk) | `app.py::refresh_dashboard` | `crates/system_monitor` | NOT_STARTED | Reads CPU %, RAM used/total, disk free/total with sysinfo. |
@@ -71,9 +71,9 @@
 ## 2. Migration Status Summary
 
 - **Total Tracked Features:** 46
-- **NOT_STARTED:** 36
+- **NOT_STARTED:** 30
 - **ANALYZING:** 0
 - **IMPLEMENTING:** 0
 - **TESTING:** 0
-- **COMPLETED:** 10 (Foundation 3, File Engine 7)
+- **COMPLETED:** 16 (Foundation 3, File Engine 7, Essential Tools 6)
 - **BLOCKED:** 0

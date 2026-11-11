@@ -94,3 +94,27 @@ This journal records all engineering decisions, completed milestones, verified t
    - Clippy: Zero warnings under `-D warnings`.
    - Formatting: `cargo fmt --all -- --check` clean.
    - Python reference baseline: 58/58 unit tests passing.
+
+---
+
+## [2026-11-12] Phase 3 — Essential File Tools Completed
+
+### Actions Completed
+1. **`smart_filee_organizer` Crate Created:**
+   - `categories.rs`: `categorize` covering 7 categories (`Images`, `Documents`, `Archives`, `Installers`, `Audio`, `Videos`, `Code`, `Others`) matching Python `CATEGORY_MAP`.
+   - `rules.rs`: `parse_rules` dropping illegal paths, and `rule_folder` matching both glob patterns (`*`, `?`, `[`) and substrings in priority order.
+   - `planner.rs`: `plan_organize` with `OrganizeMode` (`ByType`, `ByTypeAndMonth`, `ByMonth`, `PhotosByDateTaken`), case-insensitive sorting, skipping dotfiles/partial downloads.
+2. **`smart_filee_search` Crate Created:**
+   - `search_files`: Recursive filesystem search supporting substring queries, wildcard patterns, minimum file size filters, and bounded result counts.
+3. **`smart_filee_renamer` Crate Created:**
+   - `plan_rename`: Bulk renamer with find/replace in stem, space transforms (`Keep`, `Underscore`, `Dash`, `Remove`), case transforms (`Keep`, `Lowercase`, `Uppercase`, `TitleCase`), prefix/suffix, sequential numbering with width padding.
+   - Rigorous conflict detection: intra-batch duplicate collisions, clashes with existing on-disk files, clashes with other batch files, illegal filename detection.
+   - `apply_rename`: Executes renames for items with status `OK` with progress reporting.
+4. **App Self-Test Integration:**
+   - Expanded `--selftest` in `crates/app/src/main.rs` to validate categorization, rule-based organization planning, wildcard search, and bulk renaming end-to-end.
+5. **Verification Evidence:**
+   - Workspace unit tests: 25/25 passing (100% pass rate in 0.34s).
+   - Clippy: Zero warnings under `-D warnings`.
+   - Format: `cargo fmt --all -- --check` clean.
+   - Headless self-test: `cargo run -p smart_filee_app -- --selftest` (Exit code 0).
+   - Python reference baseline: 58/58 unit tests passing (2.46s).

@@ -52,14 +52,14 @@
 - [x] Implement CSV exporter with UTF-8 BOM.
 - [x] Add unit tests for path guards, collision resolution, traversal, moves, and undo.
 
-### Phase 3 — Essential File Tools (IN PROGRESS)
-- [ ] Implement file categorization and custom rule parsing in `crates/organizer`.
-- [ ] Implement organization planning (`By type`, `By month`, `By type + month`).
-- [ ] Implement fast file search with glob wildcards in `crates/search`.
-- [ ] Implement bulk renamer planning, case transforms, numbering, and conflict detection in `crates/renamer`.
-- [ ] Add unit tests verifying feature parity against Python `core.py`.
+### Phase 3 — Essential File Tools (COMPLETED)
+- [x] Implement file categorization and custom rule parsing in `crates/organizer`.
+- [x] Implement organization planning (`By type`, `By month`, `By type + month`).
+- [x] Implement fast file search with glob wildcards in `crates/search`.
+- [x] Implement bulk renamer planning, case transforms, numbering, and conflict detection in `crates/renamer`.
+- [x] Add unit tests verifying feature parity against Python `core.py`.
 
-### Phase 4 — Analysis Engines
+### Phase 4 — Analysis Engines (IN PROGRESS)
 - [ ] Implement staged duplicate detection (size grouping → 64 KB head hash → full SHA-256) in `crates/duplicate`.
 - [ ] Implement disk storage analysis with bounded top 100 min-heap in `crates/disk_analyzer`.
 - [ ] Implement perceptual image hashing (9x9 Lanczos resize, dhash, ahash, union-find clustering) in `crates/image_engine`.

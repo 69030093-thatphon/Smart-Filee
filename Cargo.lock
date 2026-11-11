@@ -144,6 +144,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "glob"
+version = "0.3.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e4eba85ea1d0a966a983acd07deee566e67395d2d96b6fb39e62b5a833f1eb0b"
+
+[[package]]
 name = "iana-time-zone"
 version = "0.1.65"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -438,6 +444,9 @@ dependencies = [
  "smart_filee_common",
  "smart_filee_file_engine",
  "smart_filee_localization",
+ "smart_filee_organizer",
+ "smart_filee_renamer",
+ "smart_filee_search",
  "tracing",
  "tracing-subscriber",
 ]
@@ -477,6 +486,48 @@ version = "4.3.1"
 dependencies = [
  "serde",
  "smart_filee_common",
+ "tracing",
+]
+
+[[package]]
+name = "smart_filee_organizer"
+version = "4.3.1"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "glob",
+ "serde",
+ "smart_filee_common",
+ "smart_filee_file_engine",
+ "tempfile",
+ "thiserror",
+ "tracing",
+]
+
+[[package]]
+name = "smart_filee_renamer"
+version = "4.3.1"
+dependencies = [
+ "anyhow",
+ "serde",
+ "smart_filee_common",
+ "smart_filee_file_engine",
+ "tempfile",
+ "thiserror",
+ "tracing",
+]
+
+[[package]]
+name = "smart_filee_search"
+version = "4.3.1"
+dependencies = [
+ "anyhow",
+ "glob",
+ "serde",
+ "smart_filee_common",
+ "smart_filee_file_engine",
+ "tempfile",
+ "thiserror",
  "tracing",
 ]
 
