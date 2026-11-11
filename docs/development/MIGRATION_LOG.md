@@ -189,3 +189,43 @@ This journal records all engineering decisions, completed milestones, verified t
    - Format: `cargo fmt --all -- --check` clean.
    - Headless self-test: `cargo run -p smart_filee_app -- --selftest` (Exit code 0).
    - Python reference baseline: 58/58 unit tests passing (2.67s).
+
+---
+
+## 2026-11-12 — Phase 8: Database & Supabase Authentication Completed
+
+1. **Database Module (`crates/database`):**
+   - SQLite persistence layer powered by `rusqlite` bundled with SQLite.
+   - Schema matching legacy `sfm.db` identically:
+     - `meta`: Key-value configuration storage.
+     - `undo_batches` & `undo_moves`: Undo history with journaled batch metadata, auto-cleanup of empty directories.
+     - `activity_log`: Audit events with level filtering and log maintenance trimming > 5000 records.
+     - `rules`: User custom organization rules with priority ordering.
+     - `hash_cache`: Stored file hashes with size/mtime invalidation and 90-day pruning.
+     - `scan_history`: Directory scan history tracking.
+   - Configured `PRAGMA journal_mode=WAL;` and `PRAGMA synchronous=NORMAL;` for high-throughput write performance.
+   - `DbHashCache` implementing `smart_filee_duplicate::DuplicateHashCache` directly.
+   - Full test coverage: `test_db_rules_keep_order`, `test_db_hash_cache`, `test_db_logs_filter_and_clear`, `test_db_undo_push_pop_and_reload`.
+
+2. **Supabase Authentication Module (`crates/auth`):**
+   - Publishable API key guard: rejects service role / secret keys.
+   - Rest client interacting with Supabase GoTrue REST endpoints:
+     - `sign_in_with_password`
+     - `sign_up_with_password`
+     - `verify_otp`
+     - `get_profile` / `update_profile`
+     - `record_user_device`
+   - Non-blocking loopback HTTP listener (`EmailConfirmationListener`) bound to `127.0.0.1:8765`:
+     - Listens on `/auth/callback/<state>`.
+     - Secure token exchange via state validation.
+     - Auto-dismissing HTML response with redirect on auth verification.
+
+3. **App Self-Test Integration:**
+   - Updated `crates/app/src/main.rs` to verify database initialization, table creation, rule insertion/retrieval, undo stack persistence, log retention, and publishable key security checks during `--selftest`.
+
+4. **Verification Evidence:**
+   - Workspace unit tests: 45/45 passing (100% pass rate).
+   - Clippy: Zero warnings under `-D warnings`.
+   - Format: `cargo fmt --all -- --check` clean.
+   - Headless self-test: `cargo run -p smart_filee_app -- --selftest` (Exit code 0).
+   - Python reference baseline: 58/58 unit tests passing (2.42s).

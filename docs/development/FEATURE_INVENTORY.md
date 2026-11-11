@@ -22,7 +22,7 @@
 | **Foundation** | Cargo Workspace & Toolchain Config | — | Workspace root | COMPLETED | `cargo check --workspace`, `rust-toolchain.toml`, `rustfmt.toml` verified. |
 | **Foundation** | Application Entry Point & Logging | `app.py::main`, `crash.py` | `crates/app`, `crates/common` | COMPLETED | Clean startup, structured tracing initialized, `--selftest` verified. |
 | **Foundation** | Localization & Bilingual Strings | `i18n.py`, `i18n_th.py` | `crates/localization` | COMPLETED | EN & TH string interpolation, placeholder validation tested. |
-| **Foundation** | Database Schema & SQLite Persistence | `db.py` | `crates/database` | NOT_STARTED | Schema tables, WAL mode, legacy DB compatibility tests pass. |
+| **Foundation** | Database Schema & SQLite Persistence | `db.py` | `crates/database` | COMPLETED | Schema tables, WAL mode, legacy DB compatibility tests pass. |
 | **Foundation** | Theme System & Color Palettes | `themes.py` | `crates/ui` | NOT_STARTED | 6 themes defined, Premium Light Violet default colors match. |
 | **File Engine** | Safe Path Validation & System Directory Guards | `core.py::protected_reason` | `crates/file_engine` | COMPLETED | Refuses root & system dirs; symlinks skipped; safe bounds verified. |
 | **File Engine** | Directory Traversal & Metadata Collection | `core.py::walk_files` | `crates/file_engine` | COMPLETED | Handles unreadable files, ignores junk, respects cancellation. |
@@ -57,10 +57,10 @@
 | **System & Network** | TCP Port Connectivity Check | `core.py::check_port` | `crates/network` | COMPLETED | TCP connection test with latency measurement. |
 | **Dashboard** | Tidy Score Algorithm (0–100) | `core.py::tidy_score` | `crates/common` | COMPLETED | Mathematical score based on loose, dupes, temps, empty dirs. |
 | **Dashboard** | Time-Budgeted Quick Health Summary | `core.py::health_summary` | `crates/core` | NOT_STARTED | Read-only scan within 8.0s budget; generates recommendations. |
-| **Supabase Auth** | Client Initialization & Publishable Key Guard | `membership_client.py` | `crates/auth` | NOT_STARTED | Rejects secret keys; reads `.env` configuration safely. |
-| **Supabase Auth** | Email/Password Registration & Login | `membership_client.py` | `crates/auth` | NOT_STARTED | Calls Supabase GoTrue REST API; establishes memory session. |
-| **Supabase Auth** | Local Loopback Email Confirmation Server | `membership_client.py` | `crates/auth` | NOT_STARTED | Listens on `127.0.0.1:8765`, verifies one-time `token_hash`. |
-| **Supabase Auth** | Profile Display Name & Device Tracking | `membership_client.py` | `crates/auth` | NOT_STARTED | Updates `sfm_profiles`, records `sfm_user_devices`, logs in. |
+| **Supabase Auth** | Client Initialization & Publishable Key Guard | `membership_client.py` | `crates/auth` | COMPLETED | Rejects secret keys; reads `.env` configuration safely. |
+| **Supabase Auth** | Email/Password Registration & Login | `membership_client.py` | `crates/auth` | COMPLETED | Calls Supabase GoTrue REST API; establishes memory session. |
+| **Supabase Auth** | Local Loopback Email Confirmation Server | `membership_client.py` | `crates/auth` | COMPLETED | Listens on `127.0.0.1:8765`, verifies one-time `token_hash`. |
+| **Supabase Auth** | Profile Display Name & Device Tracking | `membership_client.py` | `crates/auth` | COMPLETED | Updates `sfm_profiles`, records `sfm_user_devices`, logs in. |
 | **Desktop UI** | `egui`/`eframe` Application Shell | `app.py` | `crates/ui` | NOT_STARTED | Slim icon sidebar rail, 14 pages stack, Ctrl+K launcher. |
 | **Desktop UI** | Custom Visual Widgets (Ring, BarList, Toast) | `widgets.py` | `crates/ui` | NOT_STARTED | Custom painter rendering matching Premium Light Violet mockup. |
 | **Desktop UI** | Modal Auth & Account Dialogs | `auth_dialog.py`, `account_dialog.py` | `crates/ui` | NOT_STARTED | Registration, login, profile edit, device revocation UI. |
@@ -71,9 +71,9 @@
 ## 2. Migration Status Summary
 
 - **Total Tracked Features:** 46
-- **NOT_STARTED:** 30
+- **NOT_STARTED:** 11
 - **ANALYZING:** 0
 - **IMPLEMENTING:** 0
 - **TESTING:** 0
-- **COMPLETED:** 16 (Foundation 3, File Engine 7, Essential Tools 6)
+- **COMPLETED:** 35 (Foundation 4, File Engine 7, Organizer & Search & Renamer 6, Analysis Engines 4, Maintenance & Backup 4, System & Network 5, Dashboard 1, Supabase Auth 4)
 - **BLOCKED:** 0

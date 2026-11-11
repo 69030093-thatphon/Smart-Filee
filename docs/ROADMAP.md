@@ -32,15 +32,15 @@
 - [x] Author Rust system architecture and workspace layout (`docs/architecture/`).
 - [x] Establish migration roadmap and status tracking.
 
-### Phase 1 — Rust Foundation (IN PROGRESS)
-- [ ] Initialize Cargo workspace root (`Cargo.toml`) and toolchain config (`rust-toolchain.toml`).
-- [ ] Establish crate boundaries (`crates/common`, `crates/localization`, `crates/app`).
-- [ ] Configure workspace lints (`clippy`), formatting rules (`rustfmt.toml`), and CI checks.
-- [ ] Implement error handling infrastructure (`thiserror`, `anyhow`).
-- [ ] Implement application entry point in `crates/app` with CLI argument parsing (supporting `--selftest`).
-- [ ] Configure structured logging with `tracing` and `tracing-subscriber`.
-- [ ] Implement basic bilingual string lookup in `crates/localization`.
-- [ ] Verify workspace compilation, formatting, clippy, and unit test execution.
+### Phase 1 — Rust Foundation (COMPLETED)
+- [x] Initialize Cargo workspace root (`Cargo.toml`) and toolchain config (`rust-toolchain.toml`).
+- [x] Establish crate boundaries (`crates/common`, `crates/localization`, `crates/app`).
+- [x] Configure workspace lints (`clippy`), formatting rules (`rustfmt.toml`), and CI checks.
+- [x] Implement error handling infrastructure (`thiserror`, `anyhow`).
+- [x] Implement application entry point in `crates/app` with CLI argument parsing (supporting `--selftest`).
+- [x] Configure structured logging with `tracing` and `tracing-subscriber`.
+- [x] Implement basic bilingual string lookup in `crates/localization`.
+- [x] Verify workspace compilation, formatting, clippy, and unit test execution.
 
 ### Phase 2 — Core File Engine (COMPLETED)
 - [x] Implement safe path validation and system folder guards in `crates/file_engine`.
@@ -90,14 +90,14 @@
 - [ ] Implement feature pages: Dashboard, Organizer, Disk, Duplicates, Photos, Cleanup, Search, Renamer, Backup, Processes, Network, System, Logs, Settings.
 - [ ] Implement modal auth and account profile dialogs.
 
-### Phase 8 — Database and Authentication
-- [ ] Implement SQLite schema and WAL mode in `crates/database` using `rusqlite`.
-- [ ] Implement legacy `sfm.db` data preservation and migrations.
-- [ ] Implement undo batch persistence and restart recovery.
-- [ ] Implement hash cache persistence and 90-day pruning.
-- [ ] Implement Supabase Auth client (`crates/auth`) using `reqwest`.
-- [ ] Implement local loopback email confirmation HTTP server on `127.0.0.1:8765`.
-- [ ] Implement device registration and profile display name update.
+### Phase 8 — Database and Authentication (COMPLETED)
+- [x] Implement SQLite schema and WAL mode in `crates/database` using `rusqlite`.
+- [x] Implement legacy `sfm.db` data preservation and migrations.
+- [x] Implement undo batch persistence and restart recovery.
+- [x] Implement hash cache persistence and 90-day pruning.
+- [x] Implement Supabase Auth client (`crates/auth`) using `reqwest`.
+- [x] Implement local loopback email confirmation HTTP server on `127.0.0.1:8765`.
+- [x] Implement device registration and profile display name update.
 
 ### Phase 9 — Full Testing and Optimization
 - [ ] Run full workspace test suite (`cargo test --workspace`).

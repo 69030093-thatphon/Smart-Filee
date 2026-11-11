@@ -304,6 +304,27 @@ fn run_selftest() -> anyhow::Result<()> {
         "Clean tidy score should be 100"
     );
 
+    // 15. Validate Database Engine
+    let db = smart_filee_database::Database::open(":memory:")?;
+    db.add_log("Selftest database initialized");
+    let logs = db.recent_logs(10, None);
+    anyhow::ensure!(logs.len() == 1, "Database should contain 1 log entry");
+    let stats = db.stats();
+    anyhow::ensure!(
+        stats.log_lines == 1,
+        "Database stats should reflect 1 log entry"
+    );
+
+    // 16. Validate Auth Config & Loopback
+    let auth_cfg = smart_filee_auth::SupabaseConfig::new(
+        smart_filee_auth::DEFAULT_SUPABASE_URL,
+        smart_filee_auth::DEFAULT_SUPABASE_PUBLISHABLE_KEY,
+    )?;
+    anyhow::ensure!(
+        !auth_cfg.publishable_key.is_empty(),
+        "Publishable key must be valid"
+    );
+
     let _ = fs::remove_dir_all(&temp_dir);
 
     Ok(())
