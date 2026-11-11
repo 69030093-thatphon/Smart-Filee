@@ -275,6 +275,35 @@ fn run_selftest() -> anyhow::Result<()> {
         "Backup destination file should exist"
     );
 
+    // 12. Validate System Monitor
+    let mut sys_mon = smart_filee_system_monitor::SystemMonitor::new();
+    let snap = sys_mon.snapshot();
+    anyhow::ensure!(!snap.os_name.is_empty(), "OS name should be detected");
+    anyhow::ensure!(
+        snap.memory_total_bytes > 0,
+        "Total memory should be positive"
+    );
+    let procs = sys_mon.list_processes(None, smart_filee_system_monitor::ProcessSort::Memory);
+    anyhow::ensure!(!procs.is_empty(), "Process list should not be empty");
+
+    // 13. Validate Network Tools
+    let my_ip = smart_filee_network::local_ip();
+    anyhow::ensure!(!my_ip.is_empty(), "Local IP should not be empty");
+    anyhow::ensure!(
+        smart_filee_network::valid_host("127.0.0.1"),
+        "127.0.0.1 should be valid host"
+    );
+    anyhow::ensure!(
+        !smart_filee_network::valid_host("-flag"),
+        "-flag should be invalid host"
+    );
+
+    // 14. Validate Tidy Score
+    anyhow::ensure!(
+        smart_filee_common::tidy_score(0, 0, 0, 0, 0, 0) == 100,
+        "Clean tidy score should be 100"
+    );
+
     let _ = fs::remove_dir_all(&temp_dir);
 
     Ok(())

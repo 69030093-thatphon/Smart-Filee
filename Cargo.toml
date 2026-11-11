@@ -12,6 +12,8 @@ members = [
     "crates/disk_analyzer",
     "crates/cleanup",
     "crates/backup",
+    "crates/system_monitor",
+    "crates/network",
     "crates/app",
 ]
 
@@ -47,6 +49,7 @@ exif = { package = "kamadak-exif", version = "0.5" }
 
 # CLI & Environment
 dotenvy = "0.15"
+sysinfo = "0.31"
 
 # Internal crates
 smart_filee_common = { path = "crates/common" }
@@ -60,6 +63,8 @@ smart_filee_image_engine = { path = "crates/image_engine" }
 smart_filee_disk_analyzer = { path = "crates/disk_analyzer" }
 smart_filee_cleanup = { path = "crates/cleanup" }
 smart_filee_backup = { path = "crates/backup" }
+smart_filee_system_monitor = { path = "crates/system_monitor" }
+smart_filee_network = { path = "crates/network" }
 
 [workspace.lints.rust]
 unsafe_code = "warn"

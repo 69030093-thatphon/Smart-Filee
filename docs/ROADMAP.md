@@ -74,12 +74,13 @@
 - [x] Implement timestamp preservation via `filetime` and non-destructive file copy.
 - [x] Add unit tests verifying non-destructive backup and cleanup parity against Python `core.py`.
 
-### Phase 6 — System and Network
-- [ ] Implement system resource metrics (CPU %, RAM, disk stats) in `crates/system_monitor` using `sysinfo`.
-- [ ] Implement top process listing (read-only, no kill capability).
-- [ ] Implement local IPv4 interface detection in `crates/network`.
-- [ ] Implement ping tool with DNS resolution timing.
-- [ ] Implement TCP port check tool with latency measurement.
+### Phase 6 — System and Network (COMPLETED)
+- [x] Implement system resource metrics (CPU %, RAM, disk stats) in `crates/system_monitor` using `sysinfo`.
+- [x] Implement top process listing (read-only, no kill capability).
+- [x] Implement local IPv4 interface detection in `crates/network`.
+- [x] Implement ping tool with DNS resolution timing and system ICMP ping execution.
+- [x] Implement TCP port check tool with latency measurement.
+- [x] Implement Tidy Score algorithm in `crates/common`.
 
 ### Phase 7 — Desktop UI (egui / eframe)
 - [ ] Initialize `eframe` desktop application with Premium Light Violet theme.

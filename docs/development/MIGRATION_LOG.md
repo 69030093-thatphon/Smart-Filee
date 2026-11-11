@@ -165,3 +165,27 @@ This journal records all engineering decisions, completed milestones, verified t
    - Format: `cargo fmt --all -- --check` clean.
    - Headless self-test: `cargo run -p smart_filee_app -- --selftest` (Exit code 0).
    - Python reference baseline: 58/58 unit tests passing (2.86s).
+
+---
+
+## [2026-11-12] Phase 6 — System & Network Tools Completed
+
+### Actions Completed
+1. **`smart_filee_system_monitor` Crate Created:**
+   - Resource metrics via `sysinfo`: CPU %, memory total / used, OS details, architecture, processor brand, physical & logical core count, boot time, disk partition statistics.
+   - Process listing (`list_processes`): Strictly read-only listing of active processes (PID, name, CPU %, RSS memory) with query filtering and sorting options.
+2. **`smart_filee_network` Crate Created:**
+   - `local_ip`: Outbound UDP routing detection for active local IPv4 interface without sending packets.
+   - `valid_host`: Safe regex check for valid domain and IP addresses without command injection risk.
+   - `ping_host`: DNS resolution latency measurement and multi-OS ping execution.
+   - `check_port`: TCP connection testing with latency measurement and error categorization.
+3. **Tidy Score Algorithm Implemented:**
+   - Added `tidy_score` to `crates/common` with capped penalty deductions for clutter.
+4. **App Self-Test Integration:**
+   - Integrated system monitor snapshot, process listing, network local IP, valid host checks, and tidy score into `--selftest`.
+5. **Verification Evidence:**
+   - Workspace unit tests: 39/39 passing (100% pass rate in 0.85s).
+   - Clippy: Zero warnings under `-D warnings`.
+   - Format: `cargo fmt --all -- --check` clean.
+   - Headless self-test: `cargo run -p smart_filee_app -- --selftest` (Exit code 0).
+   - Python reference baseline: 58/58 unit tests passing (2.67s).

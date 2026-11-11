@@ -50,12 +50,12 @@
 | **Bulk Renamer** | In-Batch & Disk Collision Detection | `core.py::plan_rename` | `crates/renamer` | COMPLETED | Detects duplicate new names and existing file clashes. |
 | **Backup** | Differential Backup Planning | `core.py::plan_backup` | `crates/backup` | COMPLETED | One-way sync of new & modified files; protects destination. |
 | **Backup** | Safe Backup Execution | `core.py::run_backup` | `crates/backup` | COMPLETED | Preserves file timestamps via `filetime`; never deletes destination. |
-| **System & Network** | System Resource Metrics (CPU, RAM, Disk) | `app.py::refresh_dashboard` | `crates/system_monitor` | NOT_STARTED | Reads CPU %, RAM used/total, disk free/total with sysinfo. |
-| **System & Network** | Top Process Inspection (Read-Only) | `app.py::refresh_procs` | `crates/system_monitor` | NOT_STARTED | Lists top processes by memory/CPU without kill actions. |
-| **System & Network** | Network Interfaces & Local IP Detection | `core.py::local_ip` | `crates/network` | NOT_STARTED | Detects active local network interface IPv4 address. |
-| **System & Network** | Ping & DNS Resolution Tool | `core.py::ping_host` | `crates/network` | NOT_STARTED | DNS lookup timing + system ping execution with timeout. |
-| **System & Network** | TCP Port Connectivity Check | `core.py::check_port` | `crates/network` | NOT_STARTED | TCP connection test with latency measurement. |
-| **Dashboard** | Tidy Score Algorithm (0–100) | `core.py::tidy_score` | `crates/core` | NOT_STARTED | Mathematical score based on loose, dupes, temps, empty dirs. |
+| **System & Network** | System Resource Metrics (CPU, RAM, Disk) | `app.py::refresh_dashboard` | `crates/system_monitor` | COMPLETED | Reads CPU %, RAM used/total, disk free/total with sysinfo. |
+| **System & Network** | Top Process Inspection (Read-Only) | `app.py::refresh_procs` | `crates/system_monitor` | COMPLETED | Lists top processes by memory/CPU without kill actions. |
+| **System & Network** | Network Interfaces & Local IP Detection | `core.py::local_ip` | `crates/network` | COMPLETED | Detects active local network interface IPv4 address. |
+| **System & Network** | Ping & DNS Resolution Tool | `core.py::ping_host` | `crates/network` | COMPLETED | DNS lookup timing + system ping execution with timeout. |
+| **System & Network** | TCP Port Connectivity Check | `core.py::check_port` | `crates/network` | COMPLETED | TCP connection test with latency measurement. |
+| **Dashboard** | Tidy Score Algorithm (0–100) | `core.py::tidy_score` | `crates/common` | COMPLETED | Mathematical score based on loose, dupes, temps, empty dirs. |
 | **Dashboard** | Time-Budgeted Quick Health Summary | `core.py::health_summary` | `crates/core` | NOT_STARTED | Read-only scan within 8.0s budget; generates recommendations. |
 | **Supabase Auth** | Client Initialization & Publishable Key Guard | `membership_client.py` | `crates/auth` | NOT_STARTED | Rejects secret keys; reads `.env` configuration safely. |
 | **Supabase Auth** | Email/Password Registration & Login | `membership_client.py` | `crates/auth` | NOT_STARTED | Calls Supabase GoTrue REST API; establishes memory session. |
