@@ -53,6 +53,27 @@ jobs:
       - name: Run headless application self-test
         run: cargo run -p smart_filee_app -- --selftest
 
+      - name: Build release executable (LTO + strip)
+        run: cargo build --release -p smart_filee_app
+
+      - name: Verify release headless self-test
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            target/release/smart_filee.exe --selftest
+          else
+            target/release/smart_filee --selftest
+          fi
+
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: smart-filee-${{ matrix.os }}
+          path: |
+            target/release/smart_filee*
+            !target/release/*.d
+            !target/release/*.pdb
+
   python-legacy-ci:
     name: Legacy Python Test Baseline on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}

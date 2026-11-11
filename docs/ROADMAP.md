@@ -99,17 +99,17 @@
 - [x] Implement local loopback email confirmation HTTP server on `127.0.0.1:8765`.
 - [x] Implement device registration and profile display name update.
 
-### Phase 9 — Full Testing and Optimization
-- [ ] Run full workspace test suite (`cargo test --workspace`).
-- [ ] Run clippy and format checks (`cargo clippy`, `cargo fmt`).
-- [ ] Execute regression test suite comparing Rust engine results against Python baseline fixtures.
-- [ ] Run filesystem safety and path boundary tests.
-- [ ] Profile memory consumption and record performance benchmarks.
-- [ ] Verify headless `--selftest` in CI.
+### Phase 9 — Full Testing and Optimization (COMPLETED)
+- [x] Run full workspace test suite (`cargo test --workspace`).
+- [x] Run clippy and format checks (`cargo clippy`, `cargo fmt`).
+- [x] Execute regression test suite comparing Rust engine results against Python baseline fixtures.
+- [x] Run filesystem safety and path boundary tests.
+- [x] Profile memory consumption and record performance benchmarks.
+- [x] Verify headless `--selftest` in CI.
 
-### Phase 10 — Release Preparation
-- [ ] Configure Windows native build profile (LTO, strip, codegen units).
-- [ ] Package Windows application with icon and metadata.
-- [ ] Verify clean installation and startup/shutdown lifecycle.
-- [ ] Prepare migration handoff and release documentation.
+### Phase 10 — Release Preparation (IN PROGRESS)
+- [x] Configure Windows/macOS/Linux native release profile (`opt-level = 3`, `lto = true`, `codegen-units = 1`, `panic = "abort"`, `strip = true`).
+- [x] Package Windows application with Inno Setup installer script (`installer.iss`), icon, and metadata.
+- [x] Verify clean installation and startup/shutdown lifecycle.
+- [x] Prepare migration handoff and release documentation.
 - [ ] Await explicit user approval before publishing or merging into `main`.

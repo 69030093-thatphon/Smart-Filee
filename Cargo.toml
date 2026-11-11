@@ -103,3 +103,10 @@ missing_panics_doc = "allow"
 field_reassign_with_default = "allow"
 manual_string_new = "allow"
 needless_raw_string_hashes = "allow"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

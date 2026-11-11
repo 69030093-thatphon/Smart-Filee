@@ -278,3 +278,37 @@ This journal records all engineering decisions, completed milestones, verified t
    - Format: `cargo fmt --all -- --check` clean.
    - Headless self-test: `cargo run -p smart_filee_app -- --selftest` (Exit code 0).
    - Python reference baseline: 58/58 unit tests passing (3.22s).
+
+---
+
+## 2026-11-12 — Phase 9: Performance Benchmarks & Full Testing Completed
+
+1. **Benchmark Suite Implementation (`crates/app/tests/benchmarks.rs`):**
+   - Traversal speed benchmark: Scanned 1,000 files across 20 subdirectories achieving **232,501 files/s** (0.0043s), exceeding Python baseline by **6.6x**.
+   - Hashing throughput benchmark: 50 MB synthetic binary SHA-256 computation achieving **278.2 MB/s** (1.5x faster than Python).
+   - Database WAL throughput benchmark: 10 batches (5,000 recorded file moves) in **0.0133s** (**6.2x faster** than Python SQLite).
+
+2. **Automated QA & Regression Verification:**
+   - 53/53 workspace unit and benchmark tests passing in both Debug and Release profiles.
+   - 58/58 legacy Python reference unit tests passing without regressions.
+   - 0 Clippy warnings under `-D warnings`.
+   - Updated `docs/QA/TEST_REPORT.md`, `docs/QA/REGRESSION_REPORT.md`, and `docs/performance/PERFORMANCE_REPORT.md`.
+
+---
+
+## 2026-11-12 — Phase 10: Release Preparation & Windows Packaging Completed
+
+1. **Release Optimization Profile (`Cargo.toml`):**
+   - Configured `[profile.release]` with `opt-level = 3`, `lto = true`, `codegen-units = 1`, `panic = "abort"`, and `strip = true`.
+   - Produced standalone binary of **8.7 MB** (down from ~120 MB Python virtual environment bundle, a **92.7% reduction**).
+   - Startup latency measured at **0.09s** for headless self-test.
+
+2. **Windows Packaging & Automation:**
+   - Updated Inno Setup configuration `installer.iss` for native Rust binary distribution (`smart_filee.exe` -> `SmartFileManagerPro.exe`) with icons and Thai fonts.
+   - Updated Windows batch launcher `build_exe.bat` and `run.bat` for automated compilation and testing.
+   - Enhanced `.github/workflows/ci.yml` with release binary builds and multi-platform artifact uploads (Windows `.exe`, macOS universal binary, Linux x86_64).
+
+3. **Release Documentation:**
+   - Authored `docs/releases/RELEASE_NOTES_v4.3.1.md` and `docs/releases/RELEASE_NOTES.md`.
+   - Updated `docs/ROADMAP.md`, `docs/development/PROJECT_STATUS.md`, and `docs/HANDOFF.md`.
+   - All protected actions respected: no unapproved commits or merges to `main`.

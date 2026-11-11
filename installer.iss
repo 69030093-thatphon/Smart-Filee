@@ -1,7 +1,6 @@
-
 #define MyAppName "Smart File Manager Pro"
 #define MyAppVersion "4.3.1"
-#define MyAppPublisher "Smart File Manager Pro"
+#define MyAppPublisher "Smart File Manager Pro Team"
 #define MyAppExeName "SmartFileManagerPro.exe"
 
 [Setup]
@@ -12,8 +11,9 @@ AppPublisher={#MyAppPublisher}
 DefaultDirName={autopf}\Smart File Manager Pro
 DefaultGroupName={#MyAppName}
 OutputDir=Output
-OutputBaseFilename=SmartFileManagerPro-Setup
-Compression=lzma2
+OutputBaseFilename=SmartFileManagerPro-Setup-v4.3.1
+SetupIconFile=icon.ico
+Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=modern
 ArchitecturesInstallIn64BitMode=x64
@@ -22,18 +22,13 @@ ArchitecturesInstallIn64BitMode=x64
 Name: "desktopicon"; Description: "Create a desktop shortcut"; Flags: unchecked
 
 [Files]
-Source: "dist\SmartFileManagerPro\*"; DestDir: "{app}"; \
-    Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "target\release\smart_filee.exe"; DestDir: "{app}"; DestName: "{#MyAppExeName}"; Flags: ignoreversion
+Source: "icon.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "fonts\*"; DestDir: "{app}\fonts"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
-Name: "{autoprograms}\{#MyAppName}"; \
-    Filename: "{app}\{#MyAppExeName}"
-
-Name: "{autodesktop}\{#MyAppName}"; \
-    Filename: "{app}\{#MyAppExeName}"; \
-    Tasks: desktopicon
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\icon.ico"
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\icon.ico"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; \
-    Description: "Launch Smart File Manager Pro"; \
-    Flags: postinstall nowait skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "Launch Smart File Manager Pro"; Flags: postinstall nowait skipifsilent
