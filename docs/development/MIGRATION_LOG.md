@@ -229,3 +229,52 @@ This journal records all engineering decisions, completed milestones, verified t
    - Format: `cargo fmt --all -- --check` clean.
    - Headless self-test: `cargo run -p smart_filee_app -- --selftest` (Exit code 0).
    - Python reference baseline: 58/58 unit tests passing (2.42s).
+
+---
+
+## 2026-11-12 — Phase 7: Desktop UI (`egui` / `eframe`) Completed
+
+1. **Theme System (`crates/ui/src/theme.rs`):**
+   - Implemented 6 full visual color palettes matching `themes.py`:
+     - Premium Light Violet (Default: `#F7F6FC` bg, `#FFFFFF` panels, `#7657E8` accent, `#24213A` text).
+     - Light, Neon Violet, Steam, Cyber Cyan, Crimson Night.
+   - Customized egui `Visuals` with matching widget strokes, hover fills, active selections, and rounded corners (16px cards, 10px buttons, 12px inputs).
+
+2. **Custom Visual Widgets (`crates/ui/src/widgets/`):**
+   - `Ring`: Custom-painted anti-aliased score circle with sweep angle computation and central value typography.
+   - `BarList`: Proportionally divided data rows with label, animated progress fill, and value tags.
+   - `Card` & `StatCard`: Rounded container panels and high-density metric summary cards.
+   - `Toast`: Non-blocking floating notifications anchored to the bottom-right corner with auto-expiry.
+
+3. **Modals & Dialogs (`crates/ui/src/dialogs/`):**
+   - `CommandPalette`: Fast searchable launcher (Ctrl+K) for jumping across all 14 pages.
+   - `RulesModal`: Custom pattern-to-folder rules editor with dynamic add/remove rows and persistence to SQLite.
+   - `AuthModal`: Supabase authentication dialog supporting email/password sign-in, account creation, loopback verification callback, and profile display name update.
+
+4. **14 Feature Pages (`crates/ui/src/pages/`):**
+   - `Dashboard`: Tidy score ring, hardware summary, directory scan, quick actions.
+   - `Organizer`: File categorization by type/month/EXIF, preview moves table, atomic move execution, undo last batch.
+   - `Disk`: Storage breakdown by category bar list and top 100 largest files table.
+   - `Duplicates`: Staged SHA-256 duplicate sets, original vs copy selection, safe Recycle Bin trashing.
+   - `Similar Photos`: Perceptual photo similarity clustering (dHash+aHash union-find), best copy preservation.
+   - `Cleanup`: Temporary files, old large files, empty directory pruning, safe trashing.
+   - `Search`: Substring and wildcard glob file search with size filter.
+   - `Renamer`: Bulk rename planning, find & replace, prefixes/suffixes, case transforms, numbering, conflict detection.
+   - `Backup`: One-way differential backup with destination safety validation and timestamp preservation.
+   - `Processes`: Read-only process inspection with memory/CPU sorting.
+   - `Network`: Local IP detection, DNS timing & ICMP ping, TCP port reachability.
+   - `System Info`: Hardware specifications, memory distribution, and storage partition table.
+   - `Activity Log`: Filterable audit event viewer with search and clear actions.
+   - `Settings`: Dynamic theme switching (6 themes), bilingual language switcher (EN/TH), database maintenance.
+
+5. **Application Integration & Shortcuts:**
+   - Bound slim icon navigation rail with icons `⌂`, `▤`, `◉`, `⧉`, `▣`, `✧`, `⌕`, `✎`, `⟳`, `▦`, `⌁`, `⚙`, `☷`, `✦`.
+   - Wired keyboard shortcuts: `Ctrl+1` through `Ctrl+9`, `Ctrl+Shift+1` through `Ctrl+Shift+5`, `Ctrl+K`.
+   - Connected `smart_filee_ui::run_desktop_app()` to application entry point in `crates/app/src/main.rs`.
+
+6. **Verification Evidence:**
+   - Workspace unit tests: 50/50 passing (100% pass rate).
+   - Clippy: Zero warnings under `-D warnings`.
+   - Format: `cargo fmt --all -- --check` clean.
+   - Headless self-test: `cargo run -p smart_filee_app -- --selftest` (Exit code 0).
+   - Python reference baseline: 58/58 unit tests passing (3.22s).

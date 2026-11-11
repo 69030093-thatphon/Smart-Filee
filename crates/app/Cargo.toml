@@ -25,6 +25,7 @@ smart_filee_system_monitor.workspace = true
 smart_filee_network.workspace = true
 smart_filee_database.workspace = true
 smart_filee_auth.workspace = true
+smart_filee_ui.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
 anyhow.workspace = true

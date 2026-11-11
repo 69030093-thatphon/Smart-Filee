@@ -16,6 +16,7 @@ members = [
     "crates/network",
     "crates/database",
     "crates/auth",
+    "crates/ui",
     "crates/app",
 ]
 
@@ -53,6 +54,11 @@ exif = { package = "kamadak-exif", version = "0.5" }
 rusqlite = { version = "0.32", features = ["bundled"] }
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls", "blocking"] }
 
+# UI & Dialogs
+eframe = { version = "0.29", default-features = false, features = ["default", "glow"] }
+egui = "0.29"
+rfd = "0.15"
+
 # CLI & Environment
 dotenvy = "0.15"
 sysinfo = "0.31"
@@ -73,6 +79,7 @@ smart_filee_system_monitor = { path = "crates/system_monitor" }
 smart_filee_network = { path = "crates/network" }
 smart_filee_database = { path = "crates/database" }
 smart_filee_auth = { path = "crates/auth" }
+smart_filee_ui = { path = "crates/ui" }
 
 [workspace.lints.rust]
 unsafe_code = "warn"
@@ -81,6 +88,8 @@ missing_debug_implementations = "warn"
 [workspace.lints.clippy]
 all = { level = "warn", priority = -2 }
 pedantic = { level = "warn", priority = -1 }
+assert_is_empty = "allow"
+duration_suboptimal_units = "allow"
 cast_precision_loss = "allow"
 cast_possible_wrap = "allow"
 cast_possible_truncation = "allow"

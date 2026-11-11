@@ -3,7 +3,7 @@ mod logging;
 
 use smart_filee_common::{fmt_bytes, fmt_duration, protected_reason, CancellationToken};
 use smart_filee_file_engine::{is_illegal_name, move_files, undo_moves, unique_dest, walk_files};
-use smart_filee_localization::{current_language, set_language, tr, Language};
+use smart_filee_localization::{set_language, tr, Language};
 use smart_filee_organizer::{categorize, plan_organize, CustomRule, OrganizeMode};
 use smart_filee_renamer::{apply_rename, plan_rename, RenameOptions, RenameStatus};
 use smart_filee_search::search_files;
@@ -47,12 +47,11 @@ fn main() -> anyhow::Result<()> {
         return Ok(());
     }
 
-    info!("Smart-Filee foundation initialized successfully.");
-    info!(
-        "Current active language: {}",
-        current_language().display_name()
-    );
-    info!("Translated greeting: {}", tr("Dashboard"));
+    info!("Starting Smart-Filee Desktop UI (egui/eframe)...");
+    if let Err(e) = smart_filee_ui::run_desktop_app() {
+        tracing::error!("UI Error: {e}");
+        anyhow::bail!("Desktop UI application failed: {e}");
+    }
 
     Ok(())
 }
@@ -324,6 +323,24 @@ fn run_selftest() -> anyhow::Result<()> {
         !auth_cfg.publishable_key.is_empty(),
         "Publishable key must be valid"
     );
+
+    // 17. Validate Desktop UI Initialization & Theme Integrity
+    let ui_app = smart_filee_ui::SmartFileeApp::new();
+    anyhow::ensure!(
+        ui_app.current_page == 0,
+        "UI default page should be Dashboard (0)"
+    );
+    anyhow::ensure!(
+        ui_app.theme == smart_filee_ui::Theme::PremiumLightViolet,
+        "UI default theme should be Premium Light Violet"
+    );
+    for theme in smart_filee_ui::Theme::ALL {
+        let colors = theme.colors();
+        anyhow::ensure!(
+            colors.bg != colors.text,
+            "Theme colors background and text must contrast"
+        );
+    }
 
     let _ = fs::remove_dir_all(&temp_dir);
 

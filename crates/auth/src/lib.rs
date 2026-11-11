@@ -51,6 +51,15 @@ impl SupabaseConfig {
             publishable_key: trimmed_key.to_string(),
         })
     }
+
+    /// Loads configuration from `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` environment variables.
+    pub fn from_env() -> anyhow::Result<Self> {
+        let url = std::env::var("SUPABASE_URL").unwrap_or_default();
+        let key = std::env::var("SUPABASE_PUBLISHABLE_KEY")
+            .or_else(|_| std::env::var("SUPABASE_ANON_KEY"))
+            .unwrap_or_default();
+        Self::new(&url, &key)
+    }
 }
 
 /// User profile details returned by Supabase Auth.
@@ -147,6 +156,71 @@ impl SupabaseClient {
             refresh_token,
             user,
         })
+    }
+
+    /// Registers a new user with email and password via GoTrue `/auth/v1/signup`.
+    pub fn sign_up_with_password(&self, email: &str, password: &str) -> anyhow::Result<AuthUser> {
+        let endpoint = format!("{}/auth/v1/signup", self.config.url);
+        let mut body = HashMap::new();
+        body.insert("email", email);
+        body.insert("password", password);
+
+        let resp = self
+            .client
+            .post(&endpoint)
+            .header("apikey", &self.config.publishable_key)
+            .json(&body)
+            .send()?;
+
+        if !resp.status().is_success() {
+            let err_text = resp.text().unwrap_or_default();
+            anyhow::bail!("Sign up failed: {err_text}");
+        }
+
+        let json_val: serde_json::Value = resp.json()?;
+        let user_val = if json_val.get("user").is_some() {
+            &json_val["user"]
+        } else {
+            &json_val
+        };
+
+        Ok(AuthUser {
+            id: user_val["id"].as_str().unwrap_or_default().to_string(),
+            email: user_val["email"].as_str().unwrap_or_default().to_string(),
+            display_name: user_val["user_metadata"]["display_name"]
+                .as_str()
+                .unwrap_or_default()
+                .to_string(),
+            avatar_url: user_val["user_metadata"]["avatar_url"]
+                .as_str()
+                .unwrap_or_default()
+                .to_string(),
+            role: "user".to_string(),
+        })
+    }
+
+    /// Updates the current user's profile display name.
+    pub fn update_profile(&self, access_token: &str, display_name: &str) -> anyhow::Result<()> {
+        let endpoint = format!("{}/auth/v1/user", self.config.url);
+        let mut meta = HashMap::new();
+        meta.insert("display_name", display_name);
+        let mut body = HashMap::new();
+        body.insert("data", meta);
+
+        let resp = self
+            .client
+            .put(&endpoint)
+            .header("apikey", &self.config.publishable_key)
+            .header("Authorization", format!("Bearer {access_token}"))
+            .json(&body)
+            .send()?;
+
+        if !resp.status().is_success() {
+            let err_text = resp.text().unwrap_or_default();
+            anyhow::bail!("Update profile failed: {err_text}");
+        }
+
+        Ok(())
     }
 
     /// Verifies single-use `token_hash` from email confirmation callback.

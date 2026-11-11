@@ -82,13 +82,13 @@
 - [x] Implement TCP port check tool with latency measurement.
 - [x] Implement Tidy Score algorithm in `crates/common`.
 
-### Phase 7 — Desktop UI (egui / eframe)
-- [ ] Initialize `eframe` desktop application with Premium Light Violet theme.
-- [ ] Configure Thai and Latin font stacks (`Instrument Sans` + `Leelawadee UI` / `Noto Sans Thai`).
-- [ ] Build slim icon sidebar rail with 14 page views and Ctrl+K command palette.
-- [ ] Implement custom widgets: tidy score `Ring`, `BarList` chart, `Card`, `StatCard`, `Toast`.
-- [ ] Implement feature pages: Dashboard, Organizer, Disk, Duplicates, Photos, Cleanup, Search, Renamer, Backup, Processes, Network, System, Logs, Settings.
-- [ ] Implement modal auth and account profile dialogs.
+### Phase 7 — Desktop UI (COMPLETED)
+- [x] Initialize `eframe` desktop application with Premium Light Violet theme.
+- [x] Configure 6 color themes (`Premium Light Violet`, `Light`, `Neon Violet`, `Steam`, `Cyber Cyan`, `Crimson Night`).
+- [x] Build slim icon sidebar rail with 14 page views and Ctrl+K command palette.
+- [x] Implement custom widgets: tidy score `Ring`, `BarList` chart, `Card`, `StatCard`, `Toast`.
+- [x] Implement feature pages: Dashboard, Organizer, Disk, Duplicates, Photos, Cleanup, Search, Renamer, Backup, Processes, Network, System, Logs, Settings.
+- [x] Implement modal auth and account profile dialogs with Supabase integration.
 
 ### Phase 8 — Database and Authentication (COMPLETED)
 - [x] Implement SQLite schema and WAL mode in `crates/database` using `rusqlite`.
