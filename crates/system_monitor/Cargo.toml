@@ -1,0 +1,21 @@
+[package]
+name = "smart_filee_system_monitor"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+smart_filee_common.workspace = true
+sysinfo.workspace = true
+serde.workspace = true
+chrono.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+tempfile = "3.12"
+
+[lints]
+workspace = true

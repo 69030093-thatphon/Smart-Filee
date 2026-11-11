@@ -1,0 +1,24 @@
+[package]
+name = "smart_filee_database"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+smart_filee_common.workspace = true
+smart_filee_file_engine.workspace = true
+smart_filee_duplicate.workspace = true
+rusqlite.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+tempfile = "3.12"
+
+[lints]
+workspace = true

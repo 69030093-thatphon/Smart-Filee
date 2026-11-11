@@ -1,14 +1,10 @@
 @echo off
 cd /d "%~dp0"
-if not exist .venv (
-    py -m venv .venv
-    call .venv\Scripts\activate.bat
-    python -m pip install --upgrade pip
+if exist target\release\smart_filee.exe (
+    start "" target\release\smart_filee.exe
+) else if exist target\debug\smart_filee.exe (
+    start "" target\debug\smart_filee.exe
 ) else (
-    call .venv\Scripts\activate.bat
+    echo Launching Smart-Filee via Cargo...
+    cargo run -p smart_filee_app
 )
-python -c "import supabase" >nul 2>&1
-if errorlevel 1 (
-    python -m pip install -r requirements.txt
-)
-python app.py

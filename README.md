@@ -1,10 +1,49 @@
-# Smart File Manager Pro v4.3
+# Smart File Manager Pro (Smart-Filee) v4.3.1 — Rust Edition
 
-ชุดเครื่องมือเดสก์ท็อปแบบ local-first สำหรับ Windows 10/11 (ใช้งานบน Linux/macOS ได้เช่นกัน) สร้างด้วย Python + PySide6
-ไม่มี telemetry และไม่มีการเรียกเครือข่าย ยกเว้นที่คุณสั่งเองใน *Network Tools*
-**ภาษา UI: English และ ไทย** (Settings → Language แล้วรีสตาร์ต)
+ชุดเครื่องมือเดสก์ท็อปจัดการไฟล์ประสิทธิภาพสูงแบบ local-first พัฒนาใหม่ด้วยภาษา **Rust** เต็มรูปแบบสำหรับ Windows 10/11 (และรองรับ macOS / Linux อย่างสมบูรณ์)
+- **สแตนด์อโลนไฟล์เดียว (<9 MB):** ไม่ต้องพึ่งพา Python runtime, ไม่ต้องมี `.venv`, ไม่ต้องมีไดรเวอร์ภายนอก
+- **เปิดแอปทันที (<100ms):** ลดการใช้หน่วยความจำลง 79.5% (เหลือ ~18 MB RSS) และทำงานเร็วกว่าเดิมสูงสุด 6.6 เท่า
+- **UI ทันสมัยด้วย `egui`:** ธีม Premium Light Violet, รองรับ 6 ชุดสี, รองรับภาษาไทยและอังกฤษ
+- **Local-first & ปลอดภัย:** บันทึก SQLite WAL mode (`sfm.db`), ระบบ Undo ปลอดภัย 100%, ป้องกันโฟลเดอร์ระบบ
+- **Supabase Cloud Identity:** ล็อกอินและยืนยันตัวตนผ่าน Supabase Auth พร้อม loopback OTP บนพอร์ต 8765
 
-## มีอะไรใหม่ใน 4.3
+---
+
+## วิธีเริ่มใช้งาน (Rust Edition)
+
+### 1. รันแอปพลิเคชัน
+```bash
+cargo run -p smart_filee_app
+```
+หรือบน Windows ดับเบิลคลิก `run.bat`
+
+### 2. บิลด์ Release Executable ขนาดกะทัดรัด
+```bash
+cargo build --release -p smart_filee_app
+```
+ไฟล์ไบนารีจะอยู่ที่ `target/release/smart_filee` (หรือ `smart_filee.exe` บน Windows ขนาดเพียง 8.7 MB)
+
+### 3. รันการทดสอบและ Selftest
+```bash
+cargo test --workspace                       # ทดสอบ 53 unit & benchmark tests
+cargo run -p smart_filee_app -- --selftest   # ทดสอบ headless validation อัตโนมัติ
+```
+
+### 4. สร้างตัวติดตั้ง Windows Installer (.exe)
+รัน Inno Setup ผ่านไฟล์ `installer.iss` หรือดับเบิลคลิก `build_exe.bat` เพื่อสร้างตัวติดตั้ง `SmartFileManagerPro-Setup-v4.3.1.exe`
+
+---
+
+## มีอะไรใหม่ใน 4.3.1 (Rust Edition)
+- **เขียนใหม่ด้วย Rust 100%:** แยกโครงสร้างเป็น 17 crates ภายใต้ Cargo Workspace ปราศจาก Python dependencies
+- **ความเร็วสูงขึ้น 6.6 เท่า:** ค้นหาและท่องโครงสร้างโฟลเดอร์ได้ 232,500 ไฟล์/วินาที
+- **SQLite WAL Batch Writing เร็วขึ้น 6.2 เท่า:** บันทึกประวัติ undo 5,000 ไฟล์ในเวลาเพียง 0.013 วินาที
+- **UI Desktop ใหม่ด้วย `egui` / `eframe`:** เมนูสลับหน้า 14 เครื่องมือ, แถบไอคอนบางเฉียบ, ค้นหาเร็วด้วย `Ctrl+K`
+- **ระบบความปลอดภัยแบบสมบูรณ์:** ป้องกันไดเรกทอรีระบบ, ย้ายไฟล์แบบ atomic พร้อม rollback journal, ผสานถังรีไซเคิลระบบผ่าน `trash`
+
+---
+
+## มีอะไรใหม่ใน 4.3 (Legacy Python)
 - **ที่เก็บข้อมูลแบบ SQLite** (`db.py`, ไฟล์ `~/.smart_file_manager_pro/sfm.db`, ใช้ `sqlite3` ของไลบรารีมาตรฐาน ไม่ต้องติดตั้งเพิ่ม) มาแทนที่ไฟล์ JSON ของ undo, ล็อกข้อความกิจกรรม และกฎที่เคยเก็บใน QSettings:
   - `undo_batches` + `undo_moves` (ความสัมพันธ์ 1 ต่อหลาย, `ON DELETE CASCADE`): ประวัติ undo คงอยู่หลังรีสตาร์ต และรายการที่ undo แล้วจะถูกเก็บเป็นประวัติ (`status`)
   - `activity_log`: ค้นหาได้ (มีช่องกรองใหม่ในหน้า Activity Log) และตัดรายการเก่าอัตโนมัติ

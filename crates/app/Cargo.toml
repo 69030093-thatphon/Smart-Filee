@@ -1,0 +1,35 @@
+[package]
+name = "smart_filee_app"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "smart_filee"
+path = "src/main.rs"
+
+[dependencies]
+smart_filee_common.workspace = true
+smart_filee_localization.workspace = true
+smart_filee_file_engine.workspace = true
+smart_filee_organizer.workspace = true
+smart_filee_search.workspace = true
+smart_filee_renamer.workspace = true
+smart_filee_duplicate.workspace = true
+smart_filee_image_engine.workspace = true
+smart_filee_disk_analyzer.workspace = true
+smart_filee_cleanup.workspace = true
+smart_filee_backup.workspace = true
+smart_filee_system_monitor.workspace = true
+smart_filee_network.workspace = true
+smart_filee_database.workspace = true
+smart_filee_auth.workspace = true
+smart_filee_ui.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+anyhow.workspace = true
+dotenvy.workspace = true
+
+[lints]
+workspace = true
