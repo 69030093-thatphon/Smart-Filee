@@ -196,6 +196,49 @@ fn run_selftest() -> anyhow::Result<()> {
         "Renamed file does not exist"
     );
 
+    // 7. Validate Duplicate Finder
+    let dup_a = temp_dir.join("dup_a.bin");
+    let dup_b = temp_dir.join("dup_b.bin");
+    fs::write(&dup_a, b"identical duplicate content for hashing")?;
+    fs::write(&dup_b, b"identical duplicate content for hashing")?;
+
+    let dup_res = smart_filee_duplicate::find_duplicates(&temp_dir, 1, None, &cancel, |_, _| {});
+    anyhow::ensure!(
+        dup_res.groups.len() == 1,
+        "find_duplicates should detect 1 group, got {}",
+        dup_res.groups.len()
+    );
+    anyhow::ensure!(
+        dup_res.groups[0].files.len() == 2,
+        "find_duplicates group should have 2 files"
+    );
+
+    // 8. Validate Disk Analyzer
+    let disk_res = smart_filee_disk_analyzer::analyze_disk(&temp_dir, 10, &cancel, |_| {});
+    anyhow::ensure!(
+        disk_res.scanned >= 2,
+        "analyze_disk should have scanned at least 2 files, scanned {}",
+        disk_res.scanned
+    );
+    anyhow::ensure!(
+        disk_res.total > 0,
+        "analyze_disk total bytes should be greater than 0"
+    );
+
+    // 9. Validate Image Engine (Fingerprint & Distance)
+    let fp_a = smart_filee_image_engine::Fingerprint {
+        h_dhash: 0xAAAA_BBBB_CCCC_DDDD,
+        v_dhash: 0x1111_2222_3333_4444,
+        ahash: 0x5555_6666_7777_8888,
+        mean_brightness: 120.0,
+    };
+    let mut fp_b = fp_a;
+    fp_b.h_dhash ^= 0b11; // 2 bit difference
+    anyhow::ensure!(
+        smart_filee_image_engine::is_close(&fp_a, &fp_b, 6),
+        "Fingerprints with 2 bit difference should be close"
+    );
+
     let _ = fs::remove_dir_all(&temp_dir);
 
     Ok(())

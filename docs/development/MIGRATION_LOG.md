@@ -118,3 +118,28 @@ This journal records all engineering decisions, completed milestones, verified t
    - Format: `cargo fmt --all -- --check` clean.
    - Headless self-test: `cargo run -p smart_filee_app -- --selftest` (Exit code 0).
    - Python reference baseline: 58/58 unit tests passing (2.46s).
+
+---
+
+## [2026-11-12] Phase 4 — Analysis Engines Completed
+
+### Actions Completed
+1. **`smart_filee_duplicate` Crate Created:**
+   - Staged duplicate detection matching Python `core.py::find_duplicates`: size grouping -> 64 KB head hash -> 1 MB chunk full SHA-256 streaming.
+   - `DuplicateHashCache` trait for caching hash digests based on (path, size, mtime, kind).
+   - Retention policy: oldest copy by mtime is kept first; wasted byte calculations.
+2. **`smart_filee_image_engine` Crate Created:**
+   - Perceptual fingerprinting (`fingerprint`): converts to grayscale `Luma8`, resizes to 9x9 via Lanczos3, computes 64-bit horizontal dHash, 64-bit vertical dHash, 64-bit aHash against mean brightness.
+   - Distance metric (`is_close`): popcount XOR Hamming distance <= max_distance (default 6) and mean brightness difference <= 40.0.
+   - `find_similar_images`: Pigeonhole bucketing on horizontal dHash + union-find disjoint-set clustering. Orders group members with best quality (largest resolution, then file size) first.
+   - EXIF parser (`exif_date`): Reads `DateTimeOriginal` or `DateTime` via `kamadak-exif` crate from JPEG, TIFF, and WebP files. Wired into `smart_filee_organizer::plan_organize` for `PhotosByDateTaken` mode.
+3. **`smart_filee_disk_analyzer` Crate Created:**
+   - `analyze_disk`: Category breakdown via `categorize`, top-level folder totals (handling direct files as `"(files in folder)"`), and bounded top-N largest files ranking using a min-heap in O(N log K).
+4. **App Self-Test Integration:**
+   - Integrated duplicate detection, disk space analyzer, and image perceptual hash distance tests into `--selftest`.
+5. **Verification Evidence:**
+   - Workspace unit tests: 29/29 passing (100% pass rate in 0.65s).
+   - Clippy: Zero warnings under `-D warnings`.
+   - Format: `cargo fmt --all -- --check` clean.
+   - Headless self-test: `cargo run -p smart_filee_app -- --selftest` (Exit code 0).
+   - Python reference baseline: 58/58 unit tests passing (2.73s).

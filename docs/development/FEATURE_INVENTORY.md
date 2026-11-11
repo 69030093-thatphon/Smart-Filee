@@ -33,15 +33,15 @@
 | **File Engine** | CSV Export Utility | `core.py::export_csv` | `crates/file_engine` | COMPLETED | Exports UTF-8 with BOM for Excel compatibility. |
 | **Organizer** | File Categorization by Extension | `core.py::categorize` | `crates/organizer` | COMPLETED | 7 categories match `CATEGORY_MAP` ("Images", "Documents", etc.). |
 | **Organizer** | Custom Rules Matching | `core.py::rule_folder`, `parse_rules` | `crates/organizer` | COMPLETED | Glob wildcard & substring rules evaluated in priority order. |
-| **Organizer** | EXIF Date Extraction for Photos | `core.py::exif_date` | `crates/image_engine` | NOT_STARTED | Reads `DateTimeOriginal` / `DateTime` from JPEG/TIFF/WebP. |
-| **Organizer** | Organization Planning (`By type`, `By month`, etc.) | `core.py::plan_organize` | `crates/organizer` | COMPLETED | Accurately generates planned moves without disk side effects. |
+| **Organizer** | EXIF Date Extraction for Photos | `core.py::exif_date` | `crates/image_engine` | COMPLETED | Reads `DateTimeOriginal` / `DateTime` from JPEG/TIFF/WebP via `kamadak-exif`. |
+| **Organizer** | Organization Planning (`By type`, `By month`, etc.) | `core.py::plan_organize` | `crates/organizer` | COMPLETED | Accurately generates planned moves without disk side effects; integrates EXIF photo routing. |
 | **Organizer** | Automatic Watch Folder (Debounced) | `app.py::auto_organize`, `watcher` | `crates/organizer` | NOT_STARTED | Monitored folder moves settled files; debounced 5 seconds. |
-| **Disk Analyzer** | Space Usage by Category & Subfolder | `core.py::analyze_disk` | `crates/disk_analyzer` | NOT_STARTED | Aggregates category byte totals and top-level folder sizes. |
-| **Disk Analyzer** | Top 100 Largest Files Ranking | `core.py::analyze_disk` | `crates/disk_analyzer` | NOT_STARTED | Bounded min-heap preserves top 100 files by size. |
-| **Duplicate Finder** | Staged Duplicate Detection (Size → Head → Full) | `core.py::find_duplicates` | `crates/duplicate` | NOT_STARTED | 64 KB head hash + 1 MB chunk full SHA-256; oldest copy first. |
-| **Duplicate Finder** | Persistent Hash Caching | `core.py::_cached_hash`, `db.py` | `crates/database`, `crates/duplicate` | NOT_STARTED | Reuses valid hashes when size and mtime are unchanged. |
-| **Similar Photos** | Perceptual Fingerprinting (dHash + aHash) | `core.py::_fingerprint` | `crates/image_engine` | NOT_STARTED | 9x9 Lanczos grayscale resize, 64-bit dhash (H+V), ahash, mean. |
-| **Similar Photos** | Pigeonhole Bucketing & Union-Find Clustering | `core.py::find_similar_images` | `crates/image_engine` | NOT_STARTED | Hamming distance <= 6, brightness diff <= 40; largest first. |
+| **Disk Analyzer** | Space Usage by Category & Subfolder | `core.py::analyze_disk` | `crates/disk_analyzer` | COMPLETED | Aggregates category byte totals and top-level folder sizes. |
+| **Disk Analyzer** | Top 100 Largest Files Ranking | `core.py::analyze_disk` | `crates/disk_analyzer` | COMPLETED | Bounded min-heap preserves top 100 files by size in O(N log K). |
+| **Duplicate Finder** | Staged Duplicate Detection (Size → Head → Full) | `core.py::find_duplicates` | `crates/duplicate` | COMPLETED | 64 KB head hash + 1 MB chunk full SHA-256; oldest copy first. |
+| **Duplicate Finder** | Persistent Hash Caching | `core.py::_cached_hash`, `db.py` | `crates/database`, `crates/duplicate` | COMPLETED | DuplicateHashCache trait defined and wired into find_duplicates. |
+| **Similar Photos** | Perceptual Fingerprinting (dHash + aHash) | `core.py::_fingerprint` | `crates/image_engine` | COMPLETED | 9x9 Lanczos grayscale resize, 64-bit dhash (H+V), ahash, mean brightness. |
+| **Similar Photos** | Pigeonhole Bucketing & Union-Find Clustering | `core.py::find_similar_images` | `crates/image_engine` | COMPLETED | Hamming distance <= 6, brightness diff <= 40; largest first. |
 | **Cleanup** | Temporary & Junk File Identification | `core.py::find_cleanup` | `crates/cleanup` | NOT_STARTED | Matches `TEMP_PATTERNS` with minimum age thresholds (1d/7d). |
 | **Cleanup** | Old Large Unused Files Identification | `core.py::find_cleanup` | `crates/cleanup` | NOT_STARTED | Identifies files >= `min_mb` untouched for >= `old_days`. |
 | **Cleanup** | Empty Directory Tree Pruning | `core.py::find_cleanup` | `crates/cleanup` | NOT_STARTED | Identifies top-most empty directory nodes. |

@@ -7,6 +7,9 @@ members = [
     "crates/organizer",
     "crates/search",
     "crates/renamer",
+    "crates/duplicate",
+    "crates/image_engine",
+    "crates/disk_analyzer",
     "crates/app",
 ]
 
@@ -34,6 +37,11 @@ trash = "5.3"
 walkdir = "2.5"
 glob = "0.3"
 
+# Hashing & Media
+sha2 = "0.10"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp", "bmp", "tiff"] }
+exif = { package = "kamadak-exif", version = "0.5" }
+
 # CLI & Environment
 dotenvy = "0.15"
 
@@ -44,6 +52,9 @@ smart_filee_file_engine = { path = "crates/file_engine" }
 smart_filee_organizer = { path = "crates/organizer" }
 smart_filee_search = { path = "crates/search" }
 smart_filee_renamer = { path = "crates/renamer" }
+smart_filee_duplicate = { path = "crates/duplicate" }
+smart_filee_image_engine = { path = "crates/image_engine" }
+smart_filee_disk_analyzer = { path = "crates/disk_analyzer" }
 
 [workspace.lints.rust]
 unsafe_code = "warn"

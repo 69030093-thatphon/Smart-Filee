@@ -107,8 +107,13 @@ pub fn plan_organize(
             OrganizeMode::ByMonth => folder.join(&month),
             OrganizeMode::ByTypeAndMonth => folder.join(&cat).join(&month),
             OrganizeMode::PhotosByDateTaken if cat == "Images" => {
-                // In Phase 3, default to Images/month; will connect EXIF parser in Phase 4
-                folder.join("Images").join(&month)
+                let taken = smart_filee_image_engine::exif_date(&p);
+                let photo_month = if let Some(dt) = taken {
+                    dt.format("%Y-%m").to_string()
+                } else {
+                    month
+                };
+                folder.join("Images").join(&photo_month)
             }
             _ => folder.join(&cat),
         };

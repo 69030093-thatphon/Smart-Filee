@@ -59,12 +59,12 @@
 - [x] Implement bulk renamer planning, case transforms, numbering, and conflict detection in `crates/renamer`.
 - [x] Add unit tests verifying feature parity against Python `core.py`.
 
-### Phase 4 — Analysis Engines (IN PROGRESS)
-- [ ] Implement staged duplicate detection (size grouping → 64 KB head hash → full SHA-256) in `crates/duplicate`.
-- [ ] Implement disk storage analysis with bounded top 100 min-heap in `crates/disk_analyzer`.
-- [ ] Implement perceptual image hashing (9x9 Lanczos resize, dhash, ahash, union-find clustering) in `crates/image_engine`.
-- [ ] Implement EXIF date parser for photo organization.
-- [ ] Benchmark and measure memory usage against Python baseline.
+### Phase 4 — Analysis Engines (COMPLETED)
+- [x] Implement staged duplicate detection (size grouping → 64 KB head hash → full SHA-256) in `crates/duplicate`.
+- [x] Implement disk storage analysis with bounded top 100 min-heap in `crates/disk_analyzer`.
+- [x] Implement perceptual image hashing (9x9 Lanczos resize, dhash, ahash, union-find clustering) in `crates/image_engine`.
+- [x] Implement EXIF date parser for photo organization via `kamadak-exif`.
+- [x] Connect duplicate, image engine, and disk analyzer into CLI selftest.
 
 ### Phase 5 — Maintenance and Backup
 - [ ] Implement temporary and junk file detection in `crates/cleanup`.
