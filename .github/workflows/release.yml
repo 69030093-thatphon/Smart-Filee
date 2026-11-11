@@ -1,0 +1,148 @@
+name: Multi-Platform Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Release Tag (e.g. v4.3.1)'
+        required: false
+        default: 'v4.3.1'
+  release:
+    types: [published]
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    name: Build Windows Release (.exe)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install stable Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Build Rust release binary
+        run: cargo build --release -p smart_filee_app
+
+      - name: Verify headless self-test
+        run: target\release\smart_filee.exe --selftest
+
+      - name: Install Inno Setup
+        run: choco install innosetup --yes --no-progress
+
+      - name: Build Windows Installer
+        shell: pwsh
+        run: |
+          iscc installer.iss
+
+      - name: Upload Installer Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SmartFileManagerPro-Setup-Windows
+          path: Output/*.exe
+
+      - name: Upload Portable Binary Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SmartFileManagerPro-Portable-Windows
+          path: target/release/smart_filee.exe
+
+      - name: Attach to Release
+        if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          TAG="${{ github.ref_name || github.event.release.tag_name || inputs.tag_name }}"
+          gh release upload "$TAG" Output/*.exe target/release/smart_filee.exe#SmartFileManagerPro-Portable-Windows.exe --repo ${{ github.repository }} --clobber
+
+  build-macos:
+    name: Build macOS Release
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install stable Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Build Rust release binary
+        run: cargo build --release -p smart_filee_app
+
+      - name: Verify headless self-test
+        run: ./target/release/smart_filee --selftest
+
+      - name: Package macOS binary
+        run: |
+          mkdir -p dist
+          cp target/release/smart_filee dist/SmartFileManagerPro-macOS
+          chmod +x dist/SmartFileManagerPro-macOS
+          tar -czvf SmartFileManagerPro-v4.3.1-macOS.tar.gz -C dist SmartFileManagerPro-macOS
+
+      - name: Upload macOS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SmartFileManagerPro-macOS
+          path: SmartFileManagerPro-v4.3.1-macOS.tar.gz
+
+      - name: Attach to Release
+        if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          TAG="${{ github.ref_name || github.event.release.tag_name || inputs.tag_name }}"
+          gh release upload "$TAG" SmartFileManagerPro-v4.3.1-macOS.tar.gz --repo ${{ github.repository }} --clobber
+
+  build-linux:
+    name: Build Linux Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install stable Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Build Rust release binary
+        run: cargo build --release -p smart_filee_app
+
+      - name: Verify headless self-test
+        run: ./target/release/smart_filee --selftest
+
+      - name: Package Linux binary
+        run: |
+          mkdir -p dist
+          cp target/release/smart_filee dist/SmartFileManagerPro-Linux-x86_64
+          chmod +x dist/SmartFileManagerPro-Linux-x86_64
+          tar -czvf SmartFileManagerPro-v4.3.1-Linux-x86_64.tar.gz -C dist SmartFileManagerPro-Linux-x86_64
+
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SmartFileManagerPro-Linux
+          path: SmartFileManagerPro-v4.3.1-Linux-x86_64.tar.gz
+
+      - name: Attach to Release
+        if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          TAG="${{ github.ref_name || github.event.release.tag_name || inputs.tag_name }}"
+          gh release upload "$TAG" SmartFileManagerPro-v4.3.1-Linux-x86_64.tar.gz --repo ${{ github.repository }} --clobber
