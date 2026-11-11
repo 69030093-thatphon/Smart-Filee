@@ -10,6 +10,8 @@ members = [
     "crates/duplicate",
     "crates/image_engine",
     "crates/disk_analyzer",
+    "crates/cleanup",
+    "crates/backup",
     "crates/app",
 ]
 
@@ -36,6 +38,7 @@ chrono = { version = "0.4", features = ["serde"] }
 trash = "5.3"
 walkdir = "2.5"
 glob = "0.3"
+filetime = "0.2"
 
 # Hashing & Media
 sha2 = "0.10"
@@ -55,6 +58,8 @@ smart_filee_renamer = { path = "crates/renamer" }
 smart_filee_duplicate = { path = "crates/duplicate" }
 smart_filee_image_engine = { path = "crates/image_engine" }
 smart_filee_disk_analyzer = { path = "crates/disk_analyzer" }
+smart_filee_cleanup = { path = "crates/cleanup" }
+smart_filee_backup = { path = "crates/backup" }
 
 [workspace.lints.rust]
 unsafe_code = "warn"

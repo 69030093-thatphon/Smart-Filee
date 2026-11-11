@@ -143,3 +143,25 @@ This journal records all engineering decisions, completed milestones, verified t
    - Format: `cargo fmt --all -- --check` clean.
    - Headless self-test: `cargo run -p smart_filee_app -- --selftest` (Exit code 0).
    - Python reference baseline: 58/58 unit tests passing (2.73s).
+
+---
+
+## [2026-11-12] Phase 5 — Maintenance & Backup Completed
+
+### Actions Completed
+1. **`smart_filee_cleanup` Crate Created:**
+   - `TEMP_PATTERNS`: Identifies temporary and junk files based on pattern matching (`*.tmp`, `*.temp`, `~$*`, `thumbs.db`, `.ds_store`, `*.dmp`, `*.chk`, `*.crdownload`, `*.part`) and minimum age thresholds (1 day / 7 days).
+   - Old large unused files: identifies files >= `min_mb` untouched for >= `old_days` using `max(atime, mtime)`.
+   - Empty folder pruning: bottom-up post-order directory walk, reporting top-most empty directory roots while skipping system directories.
+2. **`smart_filee_backup` Crate Created:**
+   - `plan_backup`: Differential sync comparison; identifies `New` and `Changed` files (size mismatch or mtime newer by >2s).
+   - Safety checks: Refuses protected destinations (`/`, `C:\`, system directories) and nested destinations (destination == source or inside source).
+   - `run_backup`: Safe, non-destructive file copy with parent directory creation and timestamp preservation via `filetime`. Destination files are never deleted.
+3. **App Self-Test Integration:**
+   - Integrated cleanup empty directory detection and end-to-end differential backup execution into `--selftest`.
+4. **Verification Evidence:**
+   - Workspace unit tests: 34/34 passing (100% pass rate in 0.74s).
+   - Clippy: Zero warnings under `-D warnings`.
+   - Format: `cargo fmt --all -- --check` clean.
+   - Headless self-test: `cargo run -p smart_filee_app -- --selftest` (Exit code 0).
+   - Python reference baseline: 58/58 unit tests passing (2.86s).

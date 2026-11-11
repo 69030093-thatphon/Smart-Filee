@@ -189,6 +189,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "filetime"
+version = "0.2.29"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5c287a33c7f0a620c38e641e7f60827713987b3c0f26e8ddc9462cc69cf75759"
+dependencies = [
+ "cfg-if",
+ "libc",
+]
+
+[[package]]
 name = "find-msvc-tools"
 version = "0.1.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -673,6 +683,8 @@ version = "4.3.1"
 dependencies = [
  "anyhow",
  "dotenvy",
+ "smart_filee_backup",
+ "smart_filee_cleanup",
  "smart_filee_common",
  "smart_filee_disk_analyzer",
  "smart_filee_duplicate",
@@ -684,6 +696,38 @@ dependencies = [
  "smart_filee_search",
  "tracing",
  "tracing-subscriber",
+]
+
+[[package]]
+name = "smart_filee_backup"
+version = "4.3.1"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "filetime",
+ "serde",
+ "smart_filee_common",
+ "smart_filee_file_engine",
+ "tempfile",
+ "thiserror",
+ "tracing",
+]
+
+[[package]]
+name = "smart_filee_cleanup"
+version = "4.3.1"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "filetime",
+ "glob",
+ "serde",
+ "smart_filee_common",
+ "smart_filee_file_engine",
+ "tempfile",
+ "thiserror",
+ "tracing",
+ "walkdir",
 ]
 
 [[package]]

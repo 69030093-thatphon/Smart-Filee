@@ -1,7 +1,7 @@
 # Smart-Filee — Developer Handoff Document (Rust Migration)
 
 **Generated:** 2026-11-12  
-**Current Phase:** Phase 4 Completed / Phase 5 (Maintenance & Backup) Ready to Start  
+**Current Phase:** Phase 5 Completed / Phase 6 (System & Network Tools) Ready to Start  
 **Active Working Branch:** `feat/rust-migration`  
 **Base Integration Branch:** `develop`  
 **Production Branch:** `main` (Protected; commit `f38ae5b` untouched)  
@@ -11,7 +11,7 @@
 
 ## 1. Executive Summary
 
-Phases 0, 1, 2, 3, and 4 have been completed with 100% verification and zero test failures.
+Phases 0, 1, 2, 3, 4, and 5 have been completed with 100% verification and zero test failures.
 
 The application workspace now contains:
 - `smart_filee_common`: Error types, paths, formatters, cancellation tokens.
@@ -23,9 +23,11 @@ The application workspace now contains:
 - `smart_filee_duplicate`: Staged duplicate detection (Size -> 64KB Head Hash -> Full SHA-256) and `DuplicateHashCache`.
 - `smart_filee_image_engine`: Perceptual fingerprinting (dHash+aHash), union-find clustering, and EXIF date extraction (`kamadak-exif`).
 - `smart_filee_disk_analyzer`: Disk usage aggregation by category and top folder, bounded min-heap for top 100 files.
+- `smart_filee_cleanup`: Temporary/junk file detection (`TEMP_PATTERNS`), old large unused files, and empty directory pruning.
+- `smart_filee_backup`: Differential directory synchronization (new/changed files only, destination path safety, never deletes destination).
 - `smart_filee_app`: Entry point with logging, `--selftest`, and comprehensive verification tests.
 
-All 29 Rust unit tests and all 58 legacy Python reference unit tests pass with zero errors.
+All 34 Rust unit tests and all 58 legacy Python reference unit tests pass with zero errors.
 
 ---
 
@@ -36,9 +38,9 @@ All 29 Rust unit tests and all 58 legacy Python reference unit tests pass with z
 ### Phase 2 — Core File Engine (COMPLETED)
 ### Phase 3 — Essential File Tools (COMPLETED)
 ### Phase 4 — Analysis Engines (COMPLETED)
-- `crates/duplicate`: `find_duplicates`, `hash_file`, `DuplicateHashCache`, `DuplicateGroup`, `DuplicateResult`.
-- `crates/image_engine`: `fingerprint`, `is_close`, `find_similar_images`, `exif_date`, `SimilarGroup`.
-- `crates/disk_analyzer`: `analyze_disk`, `DiskFileItem`, `DiskAnalysisResult`.
+### Phase 5 — Maintenance & Backup (COMPLETED)
+- `crates/cleanup`: `find_cleanup`, `CleanupItem`, `CleanupKind`, `CleanupResult`, `TEMP_PATTERNS`.
+- `crates/backup`: `plan_backup`, `run_backup`, `BackupPlanItem`, `BackupReason`, `BackupPlanResult`, `BackupRunResult`.
 
 ---
 
@@ -58,7 +60,7 @@ All 29 Rust unit tests and all 58 legacy Python reference unit tests pass with z
    ```
 4. **Rust Automated Tests:**
    ```bash
-   cargo test --workspace  # 29 tests passed in 0.65s, Exit 0
+   cargo test --workspace  # 34 tests passed in 0.74s, Exit 0
    ```
 5. **Headless Self-Test:**
    ```bash
@@ -66,13 +68,13 @@ All 29 Rust unit tests and all 58 legacy Python reference unit tests pass with z
    ```
 6. **Python Reference Baseline:**
    ```bash
-   python -m unittest discover -s tests -v  # 58 tests passed in 2.7s, Exit 0
+   python -m unittest discover -s tests -v  # 58 tests passed in 2.8s, Exit 0
    ```
 
 ---
 
-## 4. Next Step: Phase 5 — Maintenance & Backup
+## 4. Next Step: Phase 6 — System & Network Tools
 
 The next phase will implement:
-- `crates/cleanup`: Temporary and junk file detection (`TEMP_PATTERNS`), old large unused files (`min_mb`, `old_days`), empty directory tree pruning.
-- `crates/backup`: Differential directory synchronization (new/changed files only, destination path safety, never deletes destination).
+- `crates/system_monitor`: CPU %, RAM usage, total RAM, disk usage, read-only process listing via `sysinfo`.
+- `crates/network`: Local IP address detection, ping with DNS timing, TCP port connectivity check.

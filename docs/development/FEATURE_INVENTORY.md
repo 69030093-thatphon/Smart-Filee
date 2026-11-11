@@ -42,14 +42,14 @@
 | **Duplicate Finder** | Persistent Hash Caching | `core.py::_cached_hash`, `db.py` | `crates/database`, `crates/duplicate` | COMPLETED | DuplicateHashCache trait defined and wired into find_duplicates. |
 | **Similar Photos** | Perceptual Fingerprinting (dHash + aHash) | `core.py::_fingerprint` | `crates/image_engine` | COMPLETED | 9x9 Lanczos grayscale resize, 64-bit dhash (H+V), ahash, mean brightness. |
 | **Similar Photos** | Pigeonhole Bucketing & Union-Find Clustering | `core.py::find_similar_images` | `crates/image_engine` | COMPLETED | Hamming distance <= 6, brightness diff <= 40; largest first. |
-| **Cleanup** | Temporary & Junk File Identification | `core.py::find_cleanup` | `crates/cleanup` | NOT_STARTED | Matches `TEMP_PATTERNS` with minimum age thresholds (1d/7d). |
-| **Cleanup** | Old Large Unused Files Identification | `core.py::find_cleanup` | `crates/cleanup` | NOT_STARTED | Identifies files >= `min_mb` untouched for >= `old_days`. |
-| **Cleanup** | Empty Directory Tree Pruning | `core.py::find_cleanup` | `crates/cleanup` | NOT_STARTED | Identifies top-most empty directory nodes. |
+| **Cleanup** | Temporary & Junk File Identification | `core.py::find_cleanup` | `crates/cleanup` | COMPLETED | Matches `TEMP_PATTERNS` with minimum age thresholds (1d/7d). |
+| **Cleanup** | Old Large Unused Files Identification | `core.py::find_cleanup` | `crates/cleanup` | COMPLETED | Identifies files >= `min_mb` untouched for >= `old_days`. |
+| **Cleanup** | Empty Directory Tree Pruning | `core.py::find_cleanup` | `crates/cleanup` | COMPLETED | Post-order walk; reports top-most empty directory nodes. |
 | **Search** | Fast Filename & Wildcard Search | `core.py::search_files` | `crates/search` | COMPLETED | Supports glob `*?[` and substring search; min size filter. |
 | **Bulk Renamer** | Rename Planning & Case/Space Transforms | `core.py::plan_rename` | `crates/renamer` | COMPLETED | Find/replace, prefix/suffix, lower/upper/title, numbering. |
 | **Bulk Renamer** | In-Batch & Disk Collision Detection | `core.py::plan_rename` | `crates/renamer` | COMPLETED | Detects duplicate new names and existing file clashes. |
-| **Backup** | Differential Backup Planning | `core.py::plan_backup` | `crates/backup` | NOT_STARTED | One-way copy of new & modified files; protects destination. |
-| **Backup** | Safe Backup Execution | `core.py::run_backup` | `crates/backup` | NOT_STARTED | Preserves file timestamps; never deletes destination files. |
+| **Backup** | Differential Backup Planning | `core.py::plan_backup` | `crates/backup` | COMPLETED | One-way sync of new & modified files; protects destination. |
+| **Backup** | Safe Backup Execution | `core.py::run_backup` | `crates/backup` | COMPLETED | Preserves file timestamps via `filetime`; never deletes destination. |
 | **System & Network** | System Resource Metrics (CPU, RAM, Disk) | `app.py::refresh_dashboard` | `crates/system_monitor` | NOT_STARTED | Reads CPU %, RAM used/total, disk free/total with sysinfo. |
 | **System & Network** | Top Process Inspection (Read-Only) | `app.py::refresh_procs` | `crates/system_monitor` | NOT_STARTED | Lists top processes by memory/CPU without kill actions. |
 | **System & Network** | Network Interfaces & Local IP Detection | `core.py::local_ip` | `crates/network` | NOT_STARTED | Detects active local network interface IPv4 address. |

@@ -66,12 +66,13 @@
 - [x] Implement EXIF date parser for photo organization via `kamadak-exif`.
 - [x] Connect duplicate, image engine, and disk analyzer into CLI selftest.
 
-### Phase 5 — Maintenance and Backup
-- [ ] Implement temporary and junk file detection in `crates/cleanup`.
-- [ ] Implement old large unused file detection with age thresholds.
-- [ ] Implement empty directory pruning.
-- [ ] Implement one-way differential backup with destination safety in `crates/backup`.
-- [ ] Add unit tests verifying non-destructive backup invariants.
+### Phase 5 — Maintenance and Backup (COMPLETED)
+- [x] Implement temporary and junk file detection in `crates/cleanup`.
+- [x] Implement old large unused file detection with age thresholds.
+- [x] Implement empty directory pruning (post-order traversal, top-most reporting).
+- [x] Implement one-way differential backup with destination safety in `crates/backup`.
+- [x] Implement timestamp preservation via `filetime` and non-destructive file copy.
+- [x] Add unit tests verifying non-destructive backup and cleanup parity against Python `core.py`.
 
 ### Phase 6 — System and Network
 - [ ] Implement system resource metrics (CPU %, RAM, disk stats) in `crates/system_monitor` using `sysinfo`.

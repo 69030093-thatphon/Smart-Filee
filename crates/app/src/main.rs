@@ -239,6 +239,42 @@ fn run_selftest() -> anyhow::Result<()> {
         "Fingerprints with 2 bit difference should be close"
     );
 
+    // 10. Validate Cleanup Engine
+    let empty_dir = temp_dir.join("EmptyFolder");
+    fs::create_dir_all(&empty_dir)?;
+    let clean_res = smart_filee_cleanup::find_cleanup(&temp_dir, 100, 180.0, &cancel, |_| {});
+    anyhow::ensure!(
+        clean_res
+            .items
+            .iter()
+            .any(|it| it.kind == smart_filee_cleanup::CleanupKind::EmptyDir),
+        "find_cleanup should detect empty directory"
+    );
+
+    // 11. Validate Differential Backup
+    let backup_src = temp_dir.join("BackupSrc");
+    let backup_dst = temp_dir.join("BackupDst");
+    fs::create_dir_all(&backup_src)?;
+    fs::create_dir_all(&backup_dst)?;
+    fs::write(backup_src.join("data.txt"), "backup data")?;
+
+    let backup_plan = smart_filee_backup::plan_backup(&backup_src, &backup_dst, &cancel, |_| {})?;
+    anyhow::ensure!(
+        backup_plan.plan.len() == 1,
+        "plan_backup should plan 1 file, planned {}",
+        backup_plan.plan.len()
+    );
+    let backup_run = smart_filee_backup::run_backup(&backup_plan.plan, &cancel, |_| {});
+    anyhow::ensure!(
+        backup_run.copied == 1,
+        "run_backup should have copied 1 file, copied {}",
+        backup_run.copied
+    );
+    anyhow::ensure!(
+        backup_dst.join("data.txt").exists(),
+        "Backup destination file should exist"
+    );
+
     let _ = fs::remove_dir_all(&temp_dir);
 
     Ok(())
