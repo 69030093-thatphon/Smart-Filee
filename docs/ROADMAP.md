@@ -1,135 +1,112 @@
-# Smart File Manager Pro — Development Roadmap
+# Smart-Filee — Autonomous Rust Migration Roadmap
 
-**Document Version:** 1.1.0
-**Last Updated:** 2026-11-10
-**Current Phase:** Phase 8 — Comprehensive Documentation & Phase 9 — Git Integration & Handoff
-
----
-
-## 1. Project Objectives
-
-1. Deliver a robust, responsive, local-first file management desktop application with zero background telemetry for user file contents.
-2. Provide seamless automated file organization, duplicate identification, safe disk cleanup, bulk renaming, and differential backup synchronization.
-3. Support hybrid cloud user accounts (via Supabase Auth) with local loopback email verification, while maintaining 100% local persistence for file paths, activity logs, and metadata.
-4. Maintain bilingual parity across English and Thai languages.
-5. Provide a deterministic, cross-platform build and CI/CD automation pipeline ensuring stability across Windows, Linux, and macOS.
+**Project:** Smart-Filee (Rust Edition)  
+**Specification Reference:** `AGENT.md` (Sections 12, 20, 22)  
+**Last Updated:** 2026-11-12  
+**Strategy:** Incremental Migration with Verified Feature Parity  
+**Current Phase:** Phase 0 Completed / Entering Phase 1 (Rust Foundation)  
 
 ---
 
-## 2. Priority & Status Definitions
+## 1. Migration Goals
 
-### Priority Levels
-- **P0 — Critical:** Architectural blockers, security vulnerabilities, data integrity risks, build breaks.
-- **P1 — High:** Core file management capabilities, major UI/UX defects, CI test coverage.
-- **P2 — Normal:** Localization gaps, secondary feature enhancements, non-critical optimizations.
-- **P3 — Low:** Minor cosmetic adjustments, documentation polish, nice-to-have tooling.
-
-### Status Definitions
-- `Not Started`, `Planned`, `In Progress`, `Blocked`, `In Review`, `Testing`, `Completed`, `Deferred`
+1. **Complete Runtime Decoupling:** The application must not require Python or Qt at runtime; native Rust executable for Windows 10/11 (macOS and Linux supported).
+2. **Feature Parity:** All 14 tools and capabilities of the Python baseline must be fully operational in Rust.
+3. **UI/UX Consistency:** Preserve and enhance the Premium Light Violet visual identity using `egui` and `eframe`.
+4. **Bilingual Parity:** Support English and Thai with accurate font rendering.
+5. **Local-First & Safe:** Preserve SQLite data structures (`sfm.db`), undo batches, zero telemetry, and protected folder guards.
+6. **Supabase Cloud Identity:** Retain hybrid cloud authentication (email/password, local loopback OTP callback on port 8765, profile & device tracking).
 
 ---
 
-## 3. Major Development Phases
+## 2. Phase-by-Phase Roadmap
 
-```text
-Phase 1: Repository Understanding & Audit (Completed)
-    │
-Phase 2: Architecture & Planning (Completed)
-    │
-Phase 3: Core Implementation & Bug Remediation (Completed)
-    │
-Phase 4: UI/UX & Localization Parity (Completed)
-    │
-Phase 5: Full QA & Comprehensive Testing (Completed)
-    │
-Phase 6: Security & Performance Benchmarking (Completed)
-    │
-Phase 7: Build Packaging & CI/CD Workflows (Completed)
-    │
-Phase 8: Comprehensive Documentation & Handoff (Completed)
-    │
-Phase 9: Git Integration & Release Candidate Preparation (In Progress)
-```
+### Phase 0 — Repository Audit & Architecture (COMPLETED)
+- [x] Clone and inspect repository state and branches.
+- [x] Run baseline Python test suite (58/58 unit tests passing).
+- [x] Audit all Python modules (`core.py`, `db.py`, `app.py`, `widgets.py`, `themes.py`, `i18n.py`, `i18n_th.py`, `membership_client.py`).
+- [x] Document SQLite schema and migration requirements.
+- [x] Document Supabase Auth integration and loopback server.
+- [x] Produce `docs/development/INITIAL_AUDIT.md`.
+- [x] Produce `docs/development/FEATURE_INVENTORY.md`.
+- [x] Author Rust system architecture and workspace layout (`docs/architecture/`).
+- [x] Establish migration roadmap and status tracking.
 
----
+### Phase 1 — Rust Foundation (IN PROGRESS)
+- [ ] Initialize Cargo workspace root (`Cargo.toml`) and toolchain config (`rust-toolchain.toml`).
+- [ ] Establish crate boundaries (`crates/common`, `crates/localization`, `crates/app`).
+- [ ] Configure workspace lints (`clippy`), formatting rules (`rustfmt.toml`), and CI checks.
+- [ ] Implement error handling infrastructure (`thiserror`, `anyhow`).
+- [ ] Implement application entry point in `crates/app` with CLI argument parsing (supporting `--selftest`).
+- [ ] Configure structured logging with `tracing` and `tracing-subscriber`.
+- [ ] Implement basic bilingual string lookup in `crates/localization`.
+- [ ] Verify workspace compilation, formatting, clippy, and unit test execution.
 
-## 4. Phase Breakdown and Task Catalog
+### Phase 2 — Core File Engine
+- [ ] Implement safe path validation and system folder guards in `crates/file_engine`.
+- [ ] Implement recursive directory traversal with cancellation token and unreadable error collection.
+- [ ] Implement collision-free unique destination naming (`stem (n).ext`).
+- [ ] Implement atomic file moves with rollback journal foundations.
+- [ ] Implement OS Recycle Bin integration via `trash` crate.
+- [ ] Implement CSV exporter with UTF-8 BOM.
+- [ ] Add unit tests for path guards, collision resolution, and file moves.
 
-### Phase 1 — Repository Understanding & Audit
-- **Goal:** Clone, inspect repository structure, configure team branches, audit architecture and dependencies, record baseline health.
-- **Milestones:**
-  - [x] **TSK-01 (P0):** Inspect repository, branches, remotes, and author configuration. *(Status: Completed)*
-  - [x] **TSK-02 (P0):** Initialize branching hierarchy (`develop`, `team/dev`, `team/ui-design`, `team/tester`, `team/docs`). *(Status: Completed)*
-  - [x] **TSK-03 (P0):** Create `.gitignore` to prevent secret and cache leaks. *(Status: Completed)*
-  - [x] **TSK-04 (P0):** Author Initial Codebase Audit (`docs/development/INITIAL_AUDIT.md`). *(Status: Completed)*
-  - [x] **TSK-05 (P0):** Establish Project Roadmap & Status Tracking (`docs/ROADMAP.md`, `docs/development/PROJECT_STATUS.md`). *(Status: Completed)*
-  - [x] **TSK-06 (P0):** Initialize Phase Log & Handoff documents (`docs/PHASE-LOG.md`, `docs/HANDOFF.md`). *(Status: Completed)*
+### Phase 3 — Essential File Tools
+- [ ] Implement file categorization and custom rule parsing in `crates/organizer`.
+- [ ] Implement organization planning (`By type`, `By month`, `By type + month`).
+- [ ] Implement fast file search with glob wildcards in `crates/search`.
+- [ ] Implement bulk renamer planning, case transforms, numbering, and conflict detection in `crates/renamer`.
+- [ ] Add unit tests verifying feature parity against Python `core.py`.
 
-### Phase 2 — Architecture & Technical Planning
-- **Goal:** Formulate ADRs (Architectural Decision Records) addressing discovered technical debt (packaging inconsistencies, headless selftest, i18n scope).
-- **Milestones:**
-  - [x] **TSK-07 (P1):** Document packaging strategy ADR (single-file vs directory installer). *(Status: Completed)*
-  - [x] **TSK-08 (P1):** Document headless self-test architecture to enable automated CI verification without interactive Supabase sign-in blocking. *(Status: Completed)*
-  - [x] **TSK-09 (P2):** Define internationalization expansion architecture for account and auth dialogs. *(Status: Completed)*
+### Phase 4 — Analysis Engines
+- [ ] Implement staged duplicate detection (size grouping → 64 KB head hash → full SHA-256) in `crates/duplicate`.
+- [ ] Implement disk storage analysis with bounded top 100 min-heap in `crates/disk_analyzer`.
+- [ ] Implement perceptual image hashing (9x9 Lanczos resize, dhash, ahash, union-find clustering) in `crates/image_engine`.
+- [ ] Implement EXIF date parser for photo organization.
+- [ ] Benchmark and measure memory usage against Python baseline.
 
-### Phase 3 — Core Development & Defect Remediation
-- **Goal:** Resolve core and packaging bugs identified during the initial audit.
-- **Milestones:**
-  - [x] **TSK-10 (P0):** Fix `smartFileManagerPro.spec` missing `fonts/` and `icon.ico` assets in `datas`. *(Status: Completed)*
-  - [x] **TSK-11 (P1):** Reconcile `build_exe.bat` and `installer.iss` packaging targets. *(Status: Completed)*
-  - [x] **TSK-12 (P1):** Implement headless `--selftest` bypass in `app.py` for automated smoke testing in CI. *(Status: Completed)*
-  - [x] **TSK-13 (P1):** Fix `tests/test_ui.py` test isolation leak (`QSettings` resetting to "By type" in `setUp`/`tearDown`). *(Status: Completed)*
+### Phase 5 — Maintenance and Backup
+- [ ] Implement temporary and junk file detection in `crates/cleanup`.
+- [ ] Implement old large unused file detection with age thresholds.
+- [ ] Implement empty directory pruning.
+- [ ] Implement one-way differential backup with destination safety in `crates/backup`.
+- [ ] Add unit tests verifying non-destructive backup invariants.
 
-### Phase 4 — UI/UX & Localization (Thai & English)
-- **Goal:** Ensure complete visual consistency, accessibility, and 100% Thai localization coverage.
-- **Milestones:**
-  - [x] **TSK-14 (P1):** Refactor `account_dialog.py` to use `i18n.tr()` for all UI strings. *(Status: Completed)*
-  - [x] **TSK-15 (P1):** Complete Thai translation dictionary in `i18n_th.py` for all auth, account, and menu dialog strings. *(Status: Completed)*
-  - [x] **TSK-16 (P2):** Update `tests/test_i18n.py` AST scanner to validate `account_dialog.py` and `auth_dialog.py`. *(Status: Completed)*
-  - [x] **TSK-17 (P2):** Audit UI high-DPI scaling, font rendering, and contrast across all 6 themes (`docs/design/UI_GUIDELINES.md`). *(Status: Completed)*
+### Phase 6 — System and Network
+- [ ] Implement system resource metrics (CPU %, RAM, disk stats) in `crates/system_monitor` using `sysinfo`.
+- [ ] Implement top process listing (read-only, no kill capability).
+- [ ] Implement local IPv4 interface detection in `crates/network`.
+- [ ] Implement ping tool with DNS resolution timing.
+- [ ] Implement TCP port check tool with latency measurement.
 
-### Phase 5 — Full QA & Regression Testing
-- **Goal:** Execute all test categories across core, db, loopback callbacks, UI headless, and localization.
-- **Milestones:**
-  - [x] **TSK-18 (P0):** Run full unit test suite in headless environment and verify 100% pass rate (58/58 passing). *(Status: Completed)*
-  - [x] **TSK-19 (P1):** Verify edge-case tests for path traversal, long paths, and permission-denied file trees. *(Status: Completed)*
-  - [x] **TSK-20 (P1):** Create comprehensive QA Test Plan (`docs/QA/TEST_PLAN.md`), Test Report (`docs/QA/TEST_REPORT.md`), and Regression Report (`docs/QA/REGRESSION_REPORT.md`). *(Status: Completed)*
+### Phase 7 — Desktop UI (egui / eframe)
+- [ ] Initialize `eframe` desktop application with Premium Light Violet theme.
+- [ ] Configure Thai and Latin font stacks (`Instrument Sans` + `Leelawadee UI` / `Noto Sans Thai`).
+- [ ] Build slim icon sidebar rail with 14 page views and Ctrl+K command palette.
+- [ ] Implement custom widgets: tidy score `Ring`, `BarList` chart, `Card`, `StatCard`, `Toast`.
+- [ ] Implement feature pages: Dashboard, Organizer, Disk, Duplicates, Photos, Cleanup, Search, Renamer, Backup, Processes, Network, System, Logs, Settings.
+- [ ] Implement modal auth and account profile dialogs.
 
-### Phase 6 — Security Auditing & Performance Profiling
-- **Goal:** Conduct static code analysis, path traversal checks, secret scanning, and file operation benchmarks.
-- **Milestones:**
-  - [x] **TSK-21 (P0):** Author Security Policy & Audit Report (`docs/security/SECURITY_POLICY.md`, `docs/security/SECURITY_AUDIT.md`). *(Status: Completed)*
-  - [x] **TSK-22 (P1):** Profile and benchmark file hashing, duplicate finder cache, and startup time (`docs/performance/PERFORMANCE_BASELINE.md`, `docs/performance/PERFORMANCE_REPORT.md`). *(Status: Completed)*
+### Phase 8 — Database and Authentication
+- [ ] Implement SQLite schema and WAL mode in `crates/database` using `rusqlite`.
+- [ ] Implement legacy `sfm.db` data preservation and migrations.
+- [ ] Implement undo batch persistence and restart recovery.
+- [ ] Implement hash cache persistence and 90-day pruning.
+- [ ] Implement Supabase Auth client (`crates/auth`) using `reqwest`.
+- [ ] Implement local loopback email confirmation HTTP server on `127.0.0.1:8765`.
+- [ ] Implement device registration and profile display name update.
 
-### Phase 7 — CI/CD & Build Packaging
-- **Goal:** Implement multi-platform GitHub Actions workflows for continuous integration and automated installer creation.
-- **Milestones:**
-  - [x] **TSK-23 (P0):** Create `.github/workflows/ci.yml` running unit and UI tests on Linux and Windows runners. *(Status: Completed)*
-  - [x] **TSK-24 (P1):** Align Windows release build workflow (`build_exe.bat`) with Inno Setup (`installer.iss`). *(Status: Completed)*
-  - [x] **TSK-25 (P2):** Document CI/CD and deployment procedures in `docs/devops/CI_CD_GUIDE.md`. *(Status: Completed)*
+### Phase 9 — Full Testing and Optimization
+- [ ] Run full workspace test suite (`cargo test --workspace`).
+- [ ] Run clippy and format checks (`cargo clippy`, `cargo fmt`).
+- [ ] Execute regression test suite comparing Rust engine results against Python baseline fixtures.
+- [ ] Run filesystem safety and path boundary tests.
+- [ ] Profile memory consumption and record performance benchmarks.
+- [ ] Verify headless `--selftest` in CI.
 
-### Phase 8 — Comprehensive Documentation & Knowledge Base
-- **Goal:** Complete all technical documentation, architecture diagrams, user guides, changelog, and design guidelines.
-- **Milestones:**
-  - [x] **TSK-26 (P1):** Author `CHANGELOG.md` and `docs/design/UI_GUIDELINES.md` documenting v4.3.0 changes and design rules. *(Status: Completed)*
-  - [x] **TSK-27 (P1):** Author `docs/development/ARCHITECTURE.md` and `docs/development/DEVELOPMENT_GUIDE.md`. *(Status: Completed)*
-  - [x] **TSK-28 (P0):** Keep `docs/HANDOFF.md` and `docs/PHASE-LOG.md` synchronized across all development steps. *(Status: Completed)*
-
-### Phase 9 — Git Integration & Release Candidate Preparation
-- **Goal:** Review diffs, commit conventional messages, push to team branches, submit Pull Requests against `develop`, and prepare Release Candidate.
-- **Milestones:**
-  - [x] **TSK-29 (P0):** Submit PRs across all team branches into `develop` with passing checks. *(Status: Completed)*
-  - [ ] **TSK-30 (P0):** Execute full verification gate prior to any release candidate sign-off. *(Status: In Progress)*
-  - [ ] **TSK-31 (P0):** Await explicit user authorization before any merge into `main` or production release. *(Status: Planned)*
-
----
-
-## 5. Development Risks & Tracking
-
-| Risk ID | Description | Severity | Mitigation Plan | Status |
-|---|---|---|---|---|
-| **RSK-01** | Missing CI pipeline permits regression introduction on Windows runners. | High | Create `.github/workflows/ci.yml` multi-platform matrix workflow. | Resolved (Phase 7) |
-| **RSK-02** | User file corruption during complex organizing/undo operations. | Critical | Strict unit and regression test verification prior to modifying `core.py`. | Resolved (58/58 tests pass) |
-| **RSK-03** | Auth dialog blocking automated testing. | Medium | Add `--selftest` non-interactive bypass hook in `app.py`. | Resolved (Phase 3) |
-| **RSK-04** | QSettings state leakage across unit test executions. | Medium | Explicit `setUp` and `tearDown` resets in `tests/test_ui.py`. | Resolved (Phase 3) |
-| **RSK-05** | Untranslated strings in Account & Auth dialogs. | Low | Internationalize `account_dialog.py` and expand `i18n_th.py`. | Resolved (Phase 4) |
+### Phase 10 — Release Preparation
+- [ ] Configure Windows native build profile (LTO, strip, codegen units).
+- [ ] Package Windows application with icon and metadata.
+- [ ] Verify clean installation and startup/shutdown lifecycle.
+- [ ] Prepare migration handoff and release documentation.
+- [ ] Await explicit user approval before publishing or merging into `main`.
