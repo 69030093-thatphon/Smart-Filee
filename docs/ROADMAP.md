@@ -42,16 +42,17 @@
 - [ ] Implement basic bilingual string lookup in `crates/localization`.
 - [ ] Verify workspace compilation, formatting, clippy, and unit test execution.
 
-### Phase 2 — Core File Engine
-- [ ] Implement safe path validation and system folder guards in `crates/file_engine`.
-- [ ] Implement recursive directory traversal with cancellation token and unreadable error collection.
-- [ ] Implement collision-free unique destination naming (`stem (n).ext`).
-- [ ] Implement atomic file moves with rollback journal foundations.
-- [ ] Implement OS Recycle Bin integration via `trash` crate.
-- [ ] Implement CSV exporter with UTF-8 BOM.
-- [ ] Add unit tests for path guards, collision resolution, and file moves.
+### Phase 2 — Core File Engine (COMPLETED)
+- [x] Implement safe path validation and system folder guards in `crates/file_engine`.
+- [x] Implement recursive directory traversal with cancellation token and unreadable error collection.
+- [x] Implement collision-free unique destination naming (`stem (n).ext`).
+- [x] Implement atomic file moves with cross-device copy fallback and rollback journal.
+- [x] Implement persistent undo rollback with empty category/month directory pruning.
+- [x] Implement OS Recycle Bin integration via `trash` crate.
+- [x] Implement CSV exporter with UTF-8 BOM.
+- [x] Add unit tests for path guards, collision resolution, traversal, moves, and undo.
 
-### Phase 3 — Essential File Tools
+### Phase 3 — Essential File Tools (IN PROGRESS)
 - [ ] Implement file categorization and custom rule parsing in `crates/organizer`.
 - [ ] Implement organization planning (`By type`, `By month`, `By type + month`).
 - [ ] Implement fast file search with glob wildcards in `crates/search`.

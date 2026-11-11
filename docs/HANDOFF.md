@@ -1,7 +1,7 @@
 # Smart-Filee — Developer Handoff Document (Rust Migration)
 
 **Generated:** 2026-11-12  
-**Current Phase:** Phase 1 Completed / Phase 2 (Core File Engine) Ready to Start  
+**Current Phase:** Phase 2 Completed / Phase 3 (Essential File Tools) Ready to Start  
 **Active Working Branch:** `feat/rust-migration`  
 **Base Integration Branch:** `develop`  
 **Production Branch:** `main` (Protected; commit `f38ae5b` untouched)  
@@ -11,27 +11,28 @@
 
 ## 1. Executive Summary
 
-Phase 0 (Initial Audit & Rust System Architecture) and Phase 1 (Rust Foundation) have been completed with 100% verification.
+Phase 0 (Initial Audit & Architecture), Phase 1 (Rust Foundation), and Phase 2 (Core File Engine) have been fully completed with 100% verification.
 
-All foundational crates (`smart_filee_common`, `smart_filee_localization`, `smart_filee_app`) have been implemented, tested, and linted under strict compiler checks (`-D warnings`). The multi-platform CI workflow has been configured for Ubuntu, Windows, and macOS. Both the Rust test suite (8 unit tests) and the legacy Python baseline test suite (58 unit tests) pass with zero errors.
+The Core File Engine (`smart_filee_file_engine`) provides safe directory traversal, deterministic collision-free destination naming, atomic file moving with cross-device copy fallback, safe reverse undo rollback with empty folder pruning, native Recycle Bin integration, and UTF-8 BOM CSV export.
+
+All 18 Rust unit tests across the workspace and all 58 legacy Python baseline unit tests pass with zero errors.
 
 ---
 
 ## 2. Completed Milestones
 
 ### Phase 0 — Repository Audit & Architecture (COMPLETED)
-- `docs/development/INITIAL_AUDIT.md`: Complete audit of Python codebase, SQLite WAL schema, Supabase Auth REST, and performance baselines.
-- `docs/development/FEATURE_INVENTORY.md`: 46 features cataloged with acceptance criteria.
-- `docs/architecture/SYSTEM_ARCHITECTURE.md`: Four-tier architecture and concurrency model.
-- `docs/architecture/WORKSPACE_STRUCTURE.md`: Multi-crate workspace specification.
-- `docs/architecture/DATA_FLOW.md`: Async message passing, undo journaling, and loopback flows.
+- Audited legacy codebase, SQLite WAL schema, Supabase Auth REST, and safety models.
+- Authored initial audit, feature inventory, system architecture, workspace structure, data flow, and migration roadmap.
 
 ### Phase 1 — Rust Foundation (COMPLETED)
-- Root `Cargo.toml`, `rust-toolchain.toml`, and `rustfmt.toml`.
-- `crates/common`: `SmartFileeError`, `fmt_bytes`, `fmt_duration`, `CancellationToken`, `protected_reason`.
-- `crates/localization`: `Language`, `translate`, `translate_fmt`, `tr`, `tr_fmt`, Thai static lookup dictionary.
-- `crates/app`: CLI argument parsing, structured tracing, `--selftest` self-validation.
-- `.github/workflows/ci.yml`: Multi-OS Rust CI matrix + Python baseline test preservation.
+- Initialized workspace root, toolchain, `rustfmt.toml`, `-D warnings` Clippy configuration.
+- Implemented `crates/common`, `crates/localization`, and `crates/app`.
+- Configured multi-platform CI workflow (`.github/workflows/ci.yml`).
+
+### Phase 2 — Core File Engine (COMPLETED)
+- Implemented `crates/file_engine` (`FileItem`, `walk_files`, `unique_dest`, `move_files`, `undo_moves`, `cleanup_empty_dirs`, `trash_files`, `UndoBatchRecord`, `export_csv`).
+- Expanded headless `--selftest` in `crates/app` to validate file engine operations end-to-end.
 
 ---
 
@@ -51,7 +52,7 @@ All foundational crates (`smart_filee_common`, `smart_filee_localization`, `smar
    ```
 4. **Rust Automated Tests:**
    ```bash
-   cargo test --workspace  # 8 tests passed in 0.00s, Exit 0
+   cargo test --workspace  # 18 tests passed in 0.28s, Exit 0
    ```
 5. **Headless Self-Test:**
    ```bash
@@ -59,18 +60,15 @@ All foundational crates (`smart_filee_common`, `smart_filee_localization`, `smar
    ```
 6. **Python Reference Baseline:**
    ```bash
-   python -m unittest discover -s tests -v  # 58 tests passed in 2.8s, Exit 0
+   python -m unittest discover -s tests -v  # 58 tests passed in 3.0s, Exit 0
    ```
 
 ---
 
-## 4. Next Step: Phase 2 — Core File Engine
+## 4. Next Step: Phase 3 — Essential File Tools
 
-The next developer or autonomous session will implement `crates/file_engine`:
-1. Add `crates/file_engine` to `Cargo.toml`.
-2. Implement safe recursive directory traversal with cancellation and unreadable error accumulation.
-3. Implement `unique_dest` path resolution appending ` (n)`.
-4. Implement atomic `move_files` and rollback foundations.
-5. Implement native Recycle Bin integration with the `trash` crate.
-6. Implement CSV exporter with UTF-8 BOM.
-7. Write unit tests for directory walking, collision detection, and protected folder refusals.
+The next phase will implement:
+- `crates/organizer`: File categorization (7 categories + custom rules), organization modes (`By type`, `By month`, `By type + month`), and move planning.
+- `crates/search`: Fast wildcard and substring filename search with minimum size filters.
+- `crates/renamer`: Bulk renamer planning, string replacement, prefix/suffix, lower/upper/title casing, sequential numbering, and in-batch conflict detection.
+- Unit tests matching legacy `test_core.py` and `test_ui.py` behaviors.

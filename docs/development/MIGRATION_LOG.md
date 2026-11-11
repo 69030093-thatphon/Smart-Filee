@@ -68,3 +68,29 @@ This journal records all engineering decisions, completed milestones, verified t
    - `cargo test --workspace`: 8/8 unit tests passing (100% pass rate).
    - `cargo run -p smart_filee_app -- --selftest`: Headless self-test succeeded (Exit code 0).
    - Python baseline suite: 58/58 unit tests passing (100% pass rate).
+
+---
+
+## [2026-11-12] Phase 2 — Core File Engine Completed
+
+### Actions Completed
+1. **`smart_filee_file_engine` Crate Created:**
+   - Implemented `crates/file_engine/src/metadata.rs`: `FileItem` tracking path, size, Unix epoch mtime, and symlink flags.
+   - Implemented `crates/file_engine/src/paths.rs`: `unique_dest` appending ` (n)` deterministically, and `is_illegal_name` preventing invalid characters and trailing spaces/dots.
+   - Implemented `crates/file_engine/src/traversal.rs`: `walk_files` filtering symlinks, `SKIP_DIRS`, `SKIP_FILES`, and capturing I/O errors without panicking. Supports cooperative cancellation.
+   - Implemented `crates/file_engine/src/operations.rs`:
+     - `move_files`: revalidates system root and OS protected folders, checks source existence, creates target directories, generates unique destination names, executes atomic rename with cross-device copy fallback.
+     - `undo_moves`: reverses moves in reverse order, prevents overwriting when source exists, handles deleted destinations, and prunes empty category/month folders.
+     - `cleanup_empty_dirs`: recursive empty directory cleanup for `CATEGORY_DIRS` and `MONTH_RE` folders.
+   - Implemented `crates/file_engine/src/trash.rs`: `trash_files` with protected path check and native OS Recycle Bin integration via `trash` crate.
+   - Implemented `crates/file_engine/src/journal.rs`: `UndoBatchRecord` and `UndoMoveRecord` with JSON serialization.
+   - Implemented `crates/file_engine/src/csv.rs`: `export_csv` with UTF-8 BOM (`\u{FEFF}`) for Excel compatibility.
+2. **App Self-Test Integration:**
+   - Connected `smart_filee_file_engine` to `crates/app`.
+   - Expanded `--selftest` in `crates/app/src/main.rs` to validate traversal, `unique_dest`, atomic `move_files`, and `undo_moves` in temporary directories.
+3. **Verification Evidence:**
+   - Rust unit tests: 18/18 passing (100% pass rate in 0.28s).
+   - Headless self-test: `cargo run -p smart_filee_app -- --selftest` (Exit code 0).
+   - Clippy: Zero warnings under `-D warnings`.
+   - Formatting: `cargo fmt --all -- --check` clean.
+   - Python reference baseline: 58/58 unit tests passing.

@@ -24,13 +24,13 @@
 | **Foundation** | Localization & Bilingual Strings | `i18n.py`, `i18n_th.py` | `crates/localization` | COMPLETED | EN & TH string interpolation, placeholder validation tested. |
 | **Foundation** | Database Schema & SQLite Persistence | `db.py` | `crates/database` | NOT_STARTED | Schema tables, WAL mode, legacy DB compatibility tests pass. |
 | **Foundation** | Theme System & Color Palettes | `themes.py` | `crates/ui` | NOT_STARTED | 6 themes defined, Premium Light Violet default colors match. |
-| **File Engine** | Safe Path Validation & System Directory Guards | `core.py::protected_reason` | `crates/file_engine` | NOT_STARTED | Refuses root & system dirs; symlinks skipped; safe bounds. |
-| **File Engine** | Directory Traversal & Metadata Collection | `core.py::walk_files` | `crates/file_engine` | NOT_STARTED | Handles unreadable files, ignores junk, respects cancellation. |
-| **File Engine** | Collision-Free Path Resolution | `core.py::unique_dest` | `crates/file_engine` | NOT_STARTED | Generates `stem (n).ext` deterministically without overwriting. |
-| **File Engine** | Atomic File Operations & Journaling | `core.py::move_files`, `app.py` | `crates/file_engine` | NOT_STARTED | Operations recorded in batch journal; undo rollback verified. |
-| **File Engine** | Persistent Undo Stack & History | `core.py::undo_moves`, `db.py` | `crates/database`, `crates/file_engine` | NOT_STARTED | Reverts moved files; cleans empty dirs; survives restart. |
-| **File Engine** | OS Recycle Bin Integration | `core.py::trash_files` | `crates/file_engine` | NOT_STARTED | Safely trashes files using native OS recycle bin APIs. |
-| **File Engine** | CSV Export Utility | `core.py::export_csv` | `crates/common` | NOT_STARTED | Exports UTF-8 with BOM for Excel compatibility. |
+| **File Engine** | Safe Path Validation & System Directory Guards | `core.py::protected_reason` | `crates/file_engine` | COMPLETED | Refuses root & system dirs; symlinks skipped; safe bounds verified. |
+| **File Engine** | Directory Traversal & Metadata Collection | `core.py::walk_files` | `crates/file_engine` | COMPLETED | Handles unreadable files, ignores junk, respects cancellation. |
+| **File Engine** | Collision-Free Path Resolution | `core.py::unique_dest` | `crates/file_engine` | COMPLETED | Generates `stem (n).ext` deterministically without overwriting. |
+| **File Engine** | Atomic File Operations & Journaling | `core.py::move_files`, `app.py` | `crates/file_engine` | COMPLETED | Operations recorded in batch journal; undo rollback verified. |
+| **File Engine** | Persistent Undo Stack & History | `core.py::undo_moves`, `db.py` | `crates/database`, `crates/file_engine` | COMPLETED | Reverts moved files; cleans empty dirs; prevents overwrite. |
+| **File Engine** | OS Recycle Bin Integration | `core.py::trash_files` | `crates/file_engine` | COMPLETED | Safely trashes files using native OS recycle bin APIs. |
+| **File Engine** | CSV Export Utility | `core.py::export_csv` | `crates/file_engine` | COMPLETED | Exports UTF-8 with BOM for Excel compatibility. |
 | **Organizer** | File Categorization by Extension | `core.py::categorize` | `crates/organizer` | NOT_STARTED | 7 categories match `CATEGORY_MAP` ("Images", "Documents", etc.). |
 | **Organizer** | Custom Rules Matching | `core.py::rule_folder`, `parse_rules` | `crates/organizer` | NOT_STARTED | Glob wildcard & substring rules evaluated in priority order. |
 | **Organizer** | EXIF Date Extraction for Photos | `core.py::exif_date` | `crates/image_engine` | NOT_STARTED | Reads `DateTimeOriginal` / `DateTime` from JPEG/TIFF/WebP. |
@@ -71,9 +71,9 @@
 ## 2. Migration Status Summary
 
 - **Total Tracked Features:** 46
-- **NOT_STARTED:** 43
+- **NOT_STARTED:** 36
 - **ANALYZING:** 0
 - **IMPLEMENTING:** 0
 - **TESTING:** 0
-- **COMPLETED:** 3 (Cargo Workspace Foundation, App Entry & Logging, Localization)
+- **COMPLETED:** 10 (Foundation 3, File Engine 7)
 - **BLOCKED:** 0

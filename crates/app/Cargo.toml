@@ -12,6 +12,7 @@ path = "src/main.rs"
 [dependencies]
 smart_filee_common.workspace = true
 smart_filee_localization.workspace = true
+smart_filee_file_engine.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
 anyhow.workspace = true

@@ -2,7 +2,9 @@ mod cli;
 mod logging;
 
 use smart_filee_common::{fmt_bytes, fmt_duration, protected_reason, CancellationToken};
+use smart_filee_file_engine::{is_illegal_name, move_files, undo_moves, unique_dest, walk_files};
 use smart_filee_localization::{current_language, set_language, tr, Language};
+use std::fs;
 use std::path::Path;
 use tracing::info;
 
@@ -102,6 +104,50 @@ fn run_selftest() -> anyhow::Result<()> {
         tr("File Organizer") == "จัดระเบียบไฟล์",
         "TH translation failed"
     );
+
+    // 5. Validate file engine (traversal, unique_dest, moves, undo)
+    let temp_dir = std::env::temp_dir().join(format!("sfm_selftest_{}", std::process::id()));
+    let _ = fs::remove_dir_all(&temp_dir);
+    fs::create_dir_all(&temp_dir)?;
+
+    let test_file = temp_dir.join("test.txt");
+    fs::write(&test_file, "selftest content")?;
+
+    anyhow::ensure!(
+        !is_illegal_name("valid.txt"),
+        "valid.txt should be recognized as legal"
+    );
+    anyhow::ensure!(
+        is_illegal_name("invalid?.txt"),
+        "invalid?.txt should be recognized as illegal"
+    );
+
+    let cand1 = unique_dest(&temp_dir, "test.txt");
+    anyhow::ensure!(
+        cand1 == temp_dir.join("test (1).txt"),
+        "unique_dest should resolve to test (1).txt"
+    );
+
+    let cancel = CancellationToken::new();
+    let mut errs = Vec::new();
+    let found = walk_files(&temp_dir, &cancel, None, &mut errs, |_| {});
+    anyhow::ensure!(
+        found.len() == 1,
+        "walk_files should find exactly 1 file, found {}",
+        found.len()
+    );
+
+    let target_dir = temp_dir.join("Documents");
+    let pairs = vec![(test_file.clone(), target_dir.clone())];
+    let move_res = move_files(&pairs, &cancel, |_, _| {});
+    anyhow::ensure!(move_res.moves.len() == 1, "move_files failed to move file");
+    anyhow::ensure!(!test_file.exists(), "Source file should no longer exist");
+
+    let undo_res = undo_moves(&move_res.moves, &[], &cancel, |_, _| {});
+    anyhow::ensure!(undo_res.restored == 1, "undo_moves failed to restore file");
+    anyhow::ensure!(test_file.exists(), "Source file should be restored");
+
+    let _ = fs::remove_dir_all(&temp_dir);
 
     Ok(())
 }
