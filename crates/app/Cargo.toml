@@ -1,0 +1,21 @@
+[package]
+name = "smart_filee_app"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "smart_filee"
+path = "src/main.rs"
+
+[dependencies]
+smart_filee_common.workspace = true
+smart_filee_localization.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+anyhow.workspace = true
+dotenvy.workspace = true
+
+[lints]
+workspace = true

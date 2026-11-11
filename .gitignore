@@ -56,3 +56,8 @@ crash.log
 .idea/
 *.swp
 *.swo
+
+# Rust build artifacts
+target/
+**/*.rs.bk
+

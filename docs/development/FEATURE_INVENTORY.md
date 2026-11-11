@@ -19,9 +19,9 @@
 
 | Module / Area | Feature Item | Legacy Location | Target Rust Crate | Status | Acceptance Verification |
 |---|---|---|---|---|---|
-| **Foundation** | Cargo Workspace & Toolchain Config | — | Workspace root | NOT_STARTED | `cargo check --workspace` builds without errors. |
-| **Foundation** | Application Entry Point & Logging | `app.py::main`, `crash.py` | `crates/app`, `crates/common` | NOT_STARTED | Clean startup, structured tracing initialized. |
-| **Foundation** | Localization & Bilingual Strings | `i18n.py`, `i18n_th.py` | `crates/localization` | NOT_STARTED | EN & TH string interpolation, placeholder validation. |
+| **Foundation** | Cargo Workspace & Toolchain Config | — | Workspace root | COMPLETED | `cargo check --workspace`, `rust-toolchain.toml`, `rustfmt.toml` verified. |
+| **Foundation** | Application Entry Point & Logging | `app.py::main`, `crash.py` | `crates/app`, `crates/common` | COMPLETED | Clean startup, structured tracing initialized, `--selftest` verified. |
+| **Foundation** | Localization & Bilingual Strings | `i18n.py`, `i18n_th.py` | `crates/localization` | COMPLETED | EN & TH string interpolation, placeholder validation tested. |
 | **Foundation** | Database Schema & SQLite Persistence | `db.py` | `crates/database` | NOT_STARTED | Schema tables, WAL mode, legacy DB compatibility tests pass. |
 | **Foundation** | Theme System & Color Palettes | `themes.py` | `crates/ui` | NOT_STARTED | 6 themes defined, Premium Light Violet default colors match. |
 | **File Engine** | Safe Path Validation & System Directory Guards | `core.py::protected_reason` | `crates/file_engine` | NOT_STARTED | Refuses root & system dirs; symlinks skipped; safe bounds. |
@@ -71,9 +71,9 @@
 ## 2. Migration Status Summary
 
 - **Total Tracked Features:** 46
-- **NOT_STARTED:** 46
+- **NOT_STARTED:** 43
 - **ANALYZING:** 0
 - **IMPLEMENTING:** 0
 - **TESTING:** 0
-- **COMPLETED:** 0
+- **COMPLETED:** 3 (Cargo Workspace Foundation, App Entry & Logging, Localization)
 - **BLOCKED:** 0

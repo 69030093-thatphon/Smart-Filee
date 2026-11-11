@@ -1,0 +1,46 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/common",
+    "crates/localization",
+    "crates/app",
+]
+
+[workspace.package]
+version = "4.3.1"
+edition = "2021"
+authors = ["Smart-Filee Team", "xmxmxxx <69030093@kmitl.ac.th>"]
+license = "MIT"
+repository = "https://github.com/69030093-thatphon/Smart-Filee.git"
+
+[workspace.dependencies]
+# Error handling & logging
+thiserror = "1.0"
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+
+# Serialization & time
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+
+# CLI & Environment
+dotenvy = "0.15"
+
+# Internal crates
+smart_filee_common = { path = "crates/common" }
+smart_filee_localization = { path = "crates/localization" }
+
+[workspace.lints.rust]
+unsafe_code = "warn"
+missing_debug_implementations = "warn"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -2 }
+pedantic = { level = "warn", priority = -1 }
+cast_precision_loss = "allow"
+must_use_candidate = "allow"
+doc_markdown = "allow"
+module_name_repetitions = "allow"
+too_many_lines = "allow"
